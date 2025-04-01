@@ -20,6 +20,8 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.0.17",
-    "@tanstack/svelte-query": "^5.71.1"
+    "@tanstack/svelte-query": "^5.71.1",
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^3.0.2"
   }
 }
