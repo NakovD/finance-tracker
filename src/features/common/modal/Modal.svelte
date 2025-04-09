@@ -4,11 +4,15 @@
 
   type ModalProps = {
     dialog: HTMLDialogElement;
-    onClose?: HTMLDialogElement["onclose"];
-    children: Snippet;
-  };
+    children: Snippet<[]>;
+  } & Omit<HTMLDialogAttributes, "children">;
 
-  let { dialog = $bindable(), children, onClose }: ModalProps = $props();
+  let {
+    dialog = $bindable(),
+    children,
+    onclick,
+    ...rest
+  }: ModalProps = $props();
 
   const onClick: HTMLDialogAttributes["onclick"] = (e) => {
     const modalDimensions = e.currentTarget.getBoundingClientRect();
@@ -21,6 +25,7 @@
     ) {
       dialog?.close();
     }
+    onclick?.(e);
   };
 </script>
 
@@ -28,7 +33,7 @@
   class="m-auto w-full max-w-md p-6 rounded-2xl backdrop:bg-gray-50/50"
   bind:this={dialog}
   onclick={onClick}
-  onclose={onClose}
+  {...rest}
 >
   <button
     class="absolute top-5 right-5 text-gray-500 hover:text-gray-700"
