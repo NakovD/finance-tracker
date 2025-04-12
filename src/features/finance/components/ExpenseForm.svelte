@@ -1,0 +1,190 @@
+<script lang="ts">
+  import Inputfield from "../../common/form/Inputfield.svelte";
+  import Label from "../../common/form/Label.svelte";
+  import type { MontlyFinance } from "../models/montlyFinance";
+  import { useQueryClient, createMutation } from "@tanstack/svelte-query";
+  import { expenseTrackerDB } from "../../../infrastructure/db";
+  import { handleDbAction } from "../../../infrastructure/db/utilities/handleDbAction";
+  import type { Expense } from "../models/expense";
+  import { formatDateForDateInput } from "../utils/formatDateForDateInput";
+  import { handleExpenseUpdateAdd } from "../utils/handleExpenseUpdateAdd";
+
+  const today = new Date();
+
+  const {
+    month,
+    expense,
+    onSuccess,
+    onError,
+  }: {
+    month: MontlyFinance;
+    expense?: Expense;
+    onSuccess?: VoidFunction;
+    onError?: VoidFunction;
+  } = $props();
+
+  const qc = useQueryClient();
+
+  let nameField = $state(expense?.name ?? "");
+  let amountField = $state(expense?.amount.toString() ?? "");
+  let dateField = $state(
+    formatDateForDateInput(expense?.date ? new Date(expense.date) : today)
+  );
+
+  let touchedFields = $state<{
+    name: boolean;
+    amount: boolean;
+    date: boolean;
+  }>({
+    name: false,
+    amount: false,
+    date: expense ? false : true,
+  });
+
+  let errors = $state<{ name?: string; amount?: string; date?: string }>({});
+
+  let mutation = createMutation<MontlyFinance, Error, Expense>({
+    mutationFn: (expense: Expense) =>
+      handleDbAction(() =>
+        expenseTrackerDB.editSingle({
+          ...month,
+          expenses: handleExpenseUpdateAdd(expense, month.expenses),
+        })
+      ),
+  });
+
+  const validateName = () => {
+    if (nameField.length < 3) {
+      errors.name = "Name must be at least 3 characters long";
+    } else {
+      errors.name = undefined;
+    }
+  };
+
+  const validateAmount = () => {
+    const value = Number(amountField);
+
+    if (isNaN(value) || value <= 0) {
+      errors.amount = "Please enter a valid amount";
+    } else {
+      errors.amount = undefined;
+    }
+  };
+
+  const validateDate = () => {
+    if (!dateField) {
+      errors.date = "Please select a date";
+    } else {
+      errors.date = undefined;
+    }
+  };
+
+  const resetForm = () => {
+    nameField = "";
+    amountField = "";
+    dateField = "";
+    touchedFields.name = false;
+    touchedFields.amount = false;
+    touchedFields.date = false;
+    errors.name = undefined;
+    errors.amount = undefined;
+    errors.date = undefined;
+  };
+
+  const handleSubmit = () => {
+    $mutation.mutate(
+      {
+        amount: Number(amountField),
+        date: dateField,
+        id: expense ? expense.id : crypto.randomUUID(),
+        name: nameField,
+      },
+      {
+        onSuccess: () => {
+          qc.invalidateQueries({ queryKey: ["montly-finance", month.id] });
+          resetForm();
+          onSuccess?.();
+        },
+        onError: () => onError?.(),
+      }
+    );
+  };
+
+  let canSubmit = $derived(
+    (() => {
+      if (expense)
+        return touchedFields.name || touchedFields.amount || touchedFields.date;
+
+      return touchedFields.name && touchedFields.amount && touchedFields.date;
+    })() &&
+      errors.name === undefined &&
+      errors.amount === undefined &&
+      errors.date === undefined
+  );
+</script>
+
+<form>
+  <h2 class="font-bold">Add an expense</h2>
+  <div class="mb-5"></div>
+  <Label id="name" label="Name of expense">
+    <Inputfield
+      id="name"
+      type="text"
+      bind:value={nameField}
+      placeholder="Name of expense"
+      error={errors.name}
+      onBlur={() => {
+        touchedFields.name = true;
+        validateName();
+      }}
+    />
+    {#if errors.name}
+      <div class="mb-1"></div>
+      <p class="text-red-500 text-sm">{errors.name}</p>
+    {/if}
+  </Label>
+  <div class="mb-5"></div>
+  <Label id="amount" label="Amount">
+    <Inputfield
+      id="amount"
+      type="number"
+      bind:value={amountField}
+      placeholder="Amount"
+      error={errors.amount}
+      onBlur={() => {
+        touchedFields.amount = true;
+        validateAmount();
+      }}
+    />
+    {#if errors.amount}
+      <div class="mb-1"></div>
+      <p class="text-red-500 text-sm">{errors.amount}</p>
+    {/if}
+  </Label>
+  <div class="mb-5"></div>
+  <Label id="calendar" label="Date">
+    <Inputfield
+      id="calendar"
+      type="date"
+      bind:value={dateField}
+      placeholder="Date"
+      error={errors.date}
+      onBlur={() => {
+        touchedFields.date = true;
+        validateDate();
+      }}
+    />
+    {#if errors.amount}
+      <div class="mb-1"></div>
+      <p class="text-red-500 text-sm">{errors.date}</p>
+    {/if}
+  </Label>
+  <div class="mb-5"></div>
+  <button
+    disabled={!canSubmit}
+    type="button"
+    class="bg-blue-500 hover:bg-blue-700 disabled:bg-blue-400 text-white font-bold py-2 px-4 rounded"
+    onclick={handleSubmit}
+    >{expense ? "Edit expense" : "Add new expense"}</button
+  >
+</form>
