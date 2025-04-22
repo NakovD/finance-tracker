@@ -8,6 +8,7 @@
   import type { Expense } from "../models/expense";
   import { formatDateForDateInput } from "../utils/formatDateForDateInput";
   import { handleExpenseUpdateAdd } from "../utils/handleExpenseUpdateAdd";
+  import Textarea from "../../common/form/Textarea.svelte";
 
   const today = new Date();
 
@@ -30,18 +31,26 @@
   let dateField = $state(
     formatDateForDateInput(expense?.date ? new Date(expense.date) : today)
   );
+  let descriptionField = $state(expense?.description ?? "");
 
   let touchedFields = $state<{
     name: boolean;
     amount: boolean;
     date: boolean;
+    description: boolean;
   }>({
     name: false,
     amount: false,
     date: expense ? false : true,
+    description: expense ? false : true,
   });
 
-  let errors = $state<{ name?: string; amount?: string; date?: string }>({});
+  let errors = $state<{
+    name?: string;
+    amount?: string;
+    date?: string;
+    description?: string;
+  }>({});
 
   let mutation = createMutation<MontlyFinance, Error, Expense>({
     mutationFn: (expense: Expense) =>
@@ -79,6 +88,14 @@
     }
   };
 
+  const validateDescription = () => {
+    if (descriptionField.length > 0 && descriptionField.length < 10) {
+      errors.description = "Description must be at least 10 characters long";
+      return;
+    }
+    errors.description = undefined;
+  };
+
   const resetForm = () => {
     nameField = "";
     amountField = "";
@@ -98,6 +115,7 @@
         date: dateField,
         id: expense ? expense.id : crypto.randomUUID(),
         name: nameField,
+        description: descriptionField.length > 0 ? descriptionField : undefined,
       },
       {
         onSuccess: () => {
@@ -113,7 +131,7 @@
   let canSubmit = $derived(
     (() => {
       if (expense)
-        return touchedFields.name || touchedFields.amount || touchedFields.date;
+        return touchedFields.name || touchedFields.amount || touchedFields.date || touchedFields.description;
 
       return touchedFields.name && touchedFields.amount && touchedFields.date;
     })() &&
@@ -177,6 +195,24 @@
     {#if errors.amount}
       <div class="mb-1"></div>
       <p class="text-red-500 text-sm">{errors.date}</p>
+    {/if}
+  </Label>
+  <div class="mb-5"></div>
+  <Label id="description" label="Description">
+    <Textarea
+      id="description"
+      value={descriptionField}
+      placeholder="Description"
+      error={errors.description}
+      oninput={(e) => (descriptionField = e.currentTarget.value)}
+      onblur={() => {
+        touchedFields.description = true;
+        validateDescription();
+      }}
+    />
+    {#if errors.description}
+      <div class="mb-1"></div>
+      <p class="text-red-500 text-sm">{errors.description}</p>
     {/if}
   </Label>
   <div class="mb-5"></div>
