@@ -18,10 +18,6 @@
   let deleteDialog = $state<HTMLDialogElement>()!;
   let isOpen = $state(false);
 
-  if (expense.name === "test") {
-    console.log(expense);
-  }
-
   const handleCloseEditDialog = () => {
     isOpen = false;
     formDialog.close();
