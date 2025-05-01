@@ -1,6 +1,6 @@
 <script lang="ts">
-  import Button from "../../common/button/Button.svelte";
-  import Modal from "../../common/modal/Modal.svelte";
+  import Button from "../../../common/button/Button.svelte";
+  import Modal from "../../../common/modal/Modal.svelte";
   import type { MontlyFinance } from "../models/montlyFinance";
   import ExpenseForm from "./ExpenseForm.svelte";
 

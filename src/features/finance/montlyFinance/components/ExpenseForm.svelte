@@ -1,14 +1,14 @@
 <script lang="ts">
-  import Inputfield from "../../common/form/Inputfield.svelte";
-  import Label from "../../common/form/Label.svelte";
   import type { MontlyFinance } from "../models/montlyFinance";
   import { useQueryClient, createMutation } from "@tanstack/svelte-query";
-  import { expenseTrackerDB } from "../../../infrastructure/db";
-  import { handleDbAction } from "../../../infrastructure/db/utilities/handleDbAction";
   import type { Expense } from "../models/expense";
   import { formatDateForDateInput } from "../utils/formatDateForDateInput";
   import { handleExpenseUpdateAdd } from "../utils/handleExpenseUpdateAdd";
-  import Textarea from "../../common/form/Textarea.svelte";
+  import { expenseTrackerDB } from "../../../../infrastructure/db";
+  import { handleDbAction } from "../../../../infrastructure/db/utilities/handleDbAction";
+  import Inputfield from "../../../common/form/Inputfield.svelte";
+  import Label from "../../../common/form/Label.svelte";
+  import Textarea from "../../../common/form/Textarea.svelte";
 
   const today = new Date();
 
@@ -131,7 +131,12 @@
   let canSubmit = $derived(
     (() => {
       if (expense)
-        return touchedFields.name || touchedFields.amount || touchedFields.date || touchedFields.description;
+        return (
+          touchedFields.name ||
+          touchedFields.amount ||
+          touchedFields.date ||
+          touchedFields.description
+        );
 
       return touchedFields.name && touchedFields.amount && touchedFields.date;
     })() &&

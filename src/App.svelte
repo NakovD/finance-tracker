@@ -1,6 +1,7 @@
 <script lang="ts">
-  import { Router, Link, Route } from "svelte-routing";
+  import { Router, Route } from "svelte-routing";
   import { QueryClient, QueryClientProvider } from "@tanstack/svelte-query";
+  import MontlyFinance from "./features/finance/montlyFinance/MontlyFinance.svelte";
 
   const queryClient = new QueryClient({
     defaultOptions: {
@@ -10,14 +11,13 @@
       },
     },
   });
-  import Finance from "./features/finance/Finance.svelte";
 </script>
 
 <QueryClientProvider client={queryClient}>
   <main>
     <Router>
-      <Route path="/finance/:id" component={Finance} />
+      <Route path="/montly-finance/:id" component={MontlyFinance} />
     </Router>
-    <Finance />
+    <MontlyFinance />
   </main>
 </QueryClientProvider>
