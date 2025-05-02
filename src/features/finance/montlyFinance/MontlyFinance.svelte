@@ -7,6 +7,8 @@
   import { handleDbAction } from "../../../infrastructure/db/utilities/handleDbAction";
   import { sum } from "../../../infrastructure/utilities/reduceUtility";
 
+  let props: { id: string } = $props();
+
   const query = createQuery<MontlyFinance>({
     queryKey: ["montly-finance", "147a2270-0c34-4c9e-bae7-7d16fcdebf13"],
     queryFn: () =>
