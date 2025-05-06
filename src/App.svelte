@@ -18,9 +18,11 @@
   <main>
     <Router>
       <Route path="/montly-finance/:id" let:params>
-        <MontlyFinance id="{params.id}" />
-    </Route>
-      <Route path="/yearly-finance/:id" component={YearlyFinance} />
+        <MontlyFinance id={params.id} />
+      </Route>
+      <Route path="/yearly-finance/:id" let:params>
+        <YearlyFinance id={params.id} /></Route
+      >
     </Router>
   </main>
 </QueryClientProvider>
