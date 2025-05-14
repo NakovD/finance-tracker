@@ -9,6 +9,7 @@
   import Inputfield from "../../../common/form/Inputfield.svelte";
   import Label from "../../../common/form/Label.svelte";
   import Textarea from "../../../common/form/Textarea.svelte";
+  import type { ExpenseCategory } from "../models/expenseCategory";
 
   const today = new Date();
 
@@ -33,16 +34,22 @@
   );
   let descriptionField = $state(expense?.description ?? "");
 
+  let categoryField = $state<ExpenseCategory | undefined>(
+    expense?.category ?? undefined
+  );
+
   let touchedFields = $state<{
     name: boolean;
     amount: boolean;
     date: boolean;
     description: boolean;
+    category: boolean;
   }>({
     name: false,
     amount: false,
     date: expense ? false : true,
     description: expense ? false : true,
+    category: false,
   });
 
   let errors = $state<{
@@ -50,6 +57,7 @@
     amount?: string;
     date?: string;
     description?: string;
+    category?: string;
   }>({});
 
   let mutation = createMutation<MontlyFinance, Error, Expense>({
@@ -96,6 +104,14 @@
     errors.description = undefined;
   };
 
+  const validateCategory = () => {
+    if (!categoryField) {
+      errors.category = "Please select a category";
+    } else {
+      errors.category = undefined;
+    }
+  };
+
   const resetForm = () => {
     nameField = "";
     amountField = "";
@@ -116,6 +132,7 @@
         id: expense ? expense.id : crypto.randomUUID(),
         name: nameField,
         description: descriptionField.length > 0 ? descriptionField : undefined,
+        category: categoryField!,
       },
       {
         onSuccess: () => {
@@ -135,15 +152,25 @@
           touchedFields.name ||
           touchedFields.amount ||
           touchedFields.date ||
-          touchedFields.description
+          touchedFields.description ||
+          touchedFields.category
         );
 
-      return touchedFields.name && touchedFields.amount && touchedFields.date;
+      return (
+        touchedFields.name &&
+        touchedFields.amount &&
+        touchedFields.date &&
+        touchedFields.category
+      );
     })() &&
       errors.name === undefined &&
       errors.amount === undefined &&
-      errors.date === undefined
+      errors.date === undefined &&
+      errors.category === undefined
   );
+
+  // $inspect(errors);
+  $inspect(touchedFields);
 </script>
 
 <form>
@@ -218,6 +245,34 @@
     {#if errors.description}
       <div class="mb-1"></div>
       <p class="text-red-500 text-sm">{errors.description}</p>
+    {/if}
+  </Label>
+  <div class="mb-5"></div>
+  <Label id="category" label="Category">
+    <select
+      bind:value={categoryField}
+      onblur={() => {
+        touchedFields.category = true;
+        validateCategory();
+      }}
+      onchange={() => {
+        touchedFields.category = true;
+        validateCategory();
+      }}
+    >
+      <option value="" disabled selected> Select a category </option><option
+        value="groceries">Groceries</option
+      >
+      <option value="transportation">Transportation</option>
+      <option value="entertainment">Entertainment</option>
+      <option value="utilities">Utilities</option>
+      <option value="healthcare">Healthcare</option>
+      <option value="parentcare">Parentcare</option>
+      <option value="other">Other</option>
+    </select>
+    {#if errors.category}
+      <div class="mb-1"></div>
+      <p class="text-red-500 text-sm">{errors.category}</p>
     {/if}
   </Label>
   <div class="mb-5"></div>
