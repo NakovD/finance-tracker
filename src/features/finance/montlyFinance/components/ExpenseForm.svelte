@@ -168,9 +168,6 @@
       errors.date === undefined &&
       errors.category === undefined
   );
-
-  // $inspect(errors);
-  $inspect(touchedFields);
 </script>
 
 <form>
@@ -250,6 +247,7 @@
   <div class="mb-5"></div>
   <Label id="category" label="Category">
     <select
+      class="py-2.5 px-4 border-amber-200 border-1 text-neutral-400"
       bind:value={categoryField}
       onblur={() => {
         touchedFields.category = true;
@@ -260,15 +258,28 @@
         validateCategory();
       }}
     >
-      <option value="" disabled selected> Select a category </option><option
-        value="groceries">Groceries</option
-      >
-      <option value="transportation">Transportation</option>
-      <option value="entertainment">Entertainment</option>
-      <option value="utilities">Utilities</option>
-      <option value="healthcare">Healthcare</option>
-      <option value="parentcare">Parentcare</option>
-      <option value="other">Other</option>
+      <option class="text-neutral-400 bg-black" value="" disabled selected>
+        Select a category
+      </option>
+      <option class="text-neutral-400 bg-black" value="groceries">
+        Groceries
+      </option>
+      <option class="text-neutral-400 bg-black" value="transportation">
+        Transportation
+      </option>
+      <option class="text-neutral-400 bg-black" value="entertainment">
+        Entertainment
+      </option>
+      <option class="text-neutral-400 bg-black" value="utilities">
+        Utilities
+      </option>
+      <option class="text-neutral-400 bg-black" value="healthcare">
+        Healthcare
+      </option>
+      <option class="text-neutral-400 bg-black" value="parentcare">
+        Parentcare
+      </option>
+      <option class="text-neutral-400 bg-black" value="other">Other</option>
     </select>
     {#if errors.category}
       <div class="mb-1"></div>
