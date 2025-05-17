@@ -2,10 +2,11 @@
   import { createQuery } from "@tanstack/svelte-query";
   import type { MontlyFinance } from "./models/montlyFinance";
   import AddExpenseForm from "./components/AddExpenseForm.svelte";
-  import ExpenseListItem from "./components/ExpenseListItem.svelte";
   import { expenseTrackerDB } from "../../../infrastructure/db";
   import { handleDbAction } from "../../../infrastructure/db/utilities/handleDbAction";
   import { sum } from "../../../infrastructure/utilities/reduceUtility";
+  import type { ExpenseCategory as ExponseCategoryType } from "./models/expenseCategory";
+  import ExpenseCategory from "./components/ExpenseCategory.svelte";
 
   let props: { id: string } = $props();
 
@@ -31,16 +32,25 @@
     </h1>
     <p>Income: <span>{$query.data.income}</span></p>
     <div class="mb-4"></div>
+    <p>Expenses grouped by category</p>
+    <div class="mb-4"></div>
     {#if $query.data.expenses.length > 0}
-      <h2>Expenses</h2>
-      <div class="mb-4"></div>
-      <ul class="list-none grid grid-cols-2 gap-2">
-        {#each $query.data.expenses as expense (expense.id)}
-          <ExpenseListItem {expense} month={$query.data} />
+      {@const categories = Object.groupBy(
+        $query.data.expenses,
+        (e) => e.category
+      )}
+      {@const categoryNames = Object.keys(categories) as ExponseCategoryType[]}
+      <div class="flex flex-col gap-4">
+        {#each categoryNames as categoryName}
+          {#if categories[categoryName] !== undefined}
+            <ExpenseCategory
+              {categoryName}
+              expenses={categories[categoryName]}
+              montlyFinance={$query.data}
+            />
+          {/if}
         {/each}
-      </ul>
-    {:else}
-      <p>No expenses found.</p>
+      </div>
     {/if}
     <div class="mb-4"></div>
     <div>
