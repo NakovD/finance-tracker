@@ -177,10 +177,11 @@
     <Inputfield
       id="name"
       type="text"
-      bind:value={nameField}
+      value={nameField}
       placeholder="Name of expense"
       error={errors.name}
-      onBlur={() => {
+      oninput={(e) => (nameField = e.currentTarget.value)}
+      onblur={() => {
         touchedFields.name = true;
         validateName();
       }}
@@ -195,10 +196,11 @@
     <Inputfield
       id="amount"
       type="number"
-      bind:value={amountField}
+      value={amountField}
       placeholder="Amount"
       error={errors.amount}
-      onBlur={() => {
+      oninput={(e) => (amountField = e.currentTarget.value)}
+      onblur={() => {
         touchedFields.amount = true;
         validateAmount();
       }}
@@ -213,10 +215,11 @@
     <Inputfield
       id="calendar"
       type="date"
-      bind:value={dateField}
+      value={dateField}
       placeholder="Date"
       error={errors.date}
-      onBlur={() => {
+      oninput={(e) => (dateField = e.currentTarget.value)}
+      onblur={() => {
         touchedFields.date = true;
         validateDate();
       }}
