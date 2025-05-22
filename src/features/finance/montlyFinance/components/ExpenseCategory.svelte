@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Inputfield from "../../../common/form/Inputfield.svelte";
   import type { Expense } from "../models/expense";
   import type { MontlyFinance } from "../models/montlyFinance";
   import ExpenseListItem from "./ExpenseListItem.svelte";
@@ -15,6 +16,16 @@
 
   let categoryForDisplay =
     categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
+
+  let search = $state("");
+
+  let filteredExpenses = $derived(
+    expenses.filter(
+      (expense) =>
+        expense.name.toLowerCase().includes(search.toLowerCase()) ||
+        expense.description?.toLowerCase().includes(search.toLowerCase())
+    )
+  );
 </script>
 
 <details>
@@ -23,8 +34,16 @@
   {#if expenses.length > 0}
     <h2>Expenses for category: {categoryForDisplay}</h2>
     <div class="mb-4"></div>
+    <Inputfield
+      type="text"
+      value={search}
+      class="max-w-xs"
+      placeholder="Search for an expense"
+      oninput={({ currentTarget }) => (search = currentTarget.value)}
+    />
+    <div class="mb-4"></div>
     <ul class="list-none grid grid-cols-2 gap-2">
-      {#each expenses as expense (expense.id)}
+      {#each filteredExpenses as expense (expense.id)}
         <ExpenseListItem {expense} month={montlyFinance} />
       {/each}
     </ul>
