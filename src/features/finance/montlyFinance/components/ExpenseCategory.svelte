@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { sum } from "../../../../infrastructure/utilities/reduceUtility";
   import Inputfield from "../../../common/form/Inputfield.svelte";
   import type { Expense } from "../models/expense";
   import type { MontlyFinance } from "../models/montlyFinance";
@@ -47,6 +48,8 @@
         <ExpenseListItem {expense} month={montlyFinance} />
       {/each}
     </ul>
+    <div class="mb-4"></div>
+    <p>Total for category: <span>{sum(expenses, "amount")}</span></p>
   {:else}
     <p>No expenses found for this category.</p>
   {/if}
