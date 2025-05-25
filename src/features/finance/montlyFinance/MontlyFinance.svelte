@@ -7,6 +7,7 @@
   import { sum } from "../../../infrastructure/utilities/reduceUtility";
   import type { ExpenseCategory as ExponseCategoryType } from "./models/expenseCategory";
   import ExpenseCategory from "./components/ExpenseCategory.svelte";
+  import MonthlyExpenses from "./components/MonthlyExpenses.svelte";
 
   let props: { id: string } = $props();
 
@@ -35,22 +36,10 @@
     <p>Expenses grouped by category</p>
     <div class="mb-4"></div>
     {#if $query.data.expenses.length > 0}
-      {@const categories = Object.groupBy(
-        $query.data.expenses,
-        (e) => e.category
-      )}
-      {@const categoryNames = Object.keys(categories) as ExponseCategoryType[]}
-      <div class="flex flex-col gap-4">
-        {#each categoryNames as categoryName}
-          {#if categories[categoryName] !== undefined}
-            <ExpenseCategory
-              {categoryName}
-              expenses={categories[categoryName]}
-              montlyFinance={$query.data}
-            />
-          {/if}
-        {/each}
-      </div>
+      <MonthlyExpenses
+        expenses={$query.data.expenses}
+        monthFinance={$query.data}
+      />
     {/if}
     <div class="mb-4"></div>
     <div>
