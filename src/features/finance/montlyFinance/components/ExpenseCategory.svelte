@@ -9,16 +9,18 @@
     categoryName,
     expenses,
     montlyFinance,
+    initialSearchQuery = ""
   }: {
     categoryName: string;
     expenses: Expense[];
     montlyFinance: MontlyFinance;
+    initialSearchQuery: string;
   } = $props();
 
   let categoryForDisplay =
     categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
 
-  let search = $state("");
+  let search = $state(initialSearchQuery);
 
   let filteredExpenses = $derived(
     expenses.filter(
