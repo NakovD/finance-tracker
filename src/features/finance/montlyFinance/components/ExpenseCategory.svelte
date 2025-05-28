@@ -14,7 +14,7 @@
     categoryName: string;
     expenses: Expense[];
     montlyFinance: MontlyFinance;
-    initialSearchQuery: string;
+    initialSearchQuery?: string;
   } = $props();
 
   let categoryForDisplay =
