@@ -44,6 +44,7 @@
           categoryName={category}
           expenses={groupedByCategories[category]}
           montlyFinance={monthFinance}
+          initialSearchQuery={search}
         />
       {/if}
     {/each}
