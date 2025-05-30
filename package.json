@@ -23,6 +23,7 @@
     "@tailwindcss/vite": "^4.0.17",
     "@tanstack/svelte-query": "^5.71.1",
     "clsx": "^2.1.1",
+    "svelte-icons": "^2.1.0",
     "tailwind-merge": "^3.0.2"
   }
 }
