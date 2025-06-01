@@ -4,6 +4,7 @@
   import type { ExpenseCategory as ExpenseCategoryType } from "../models/expenseCategory";
   import type { MontlyFinance } from "../models/montlyFinance";
   import ExpenseCategory from "./ExpenseCategory.svelte";
+  import { RotateCcw } from "@lucide/svelte";
 
   const {
     expenses,
@@ -28,13 +29,18 @@
   );
 </script>
 
-<Inputfield
-  type="text"
-  value={search}
-  class="max-w-xs"
-  placeholder="Search for an expense in all categories"
-  oninput={({ currentTarget }) => (search = currentTarget.value)}
-/>
+<div class="flex items-center gap-4">
+  <Inputfield
+    type="text"
+    value={search}
+    class="max-w-xs"
+    placeholder="Search for an expense in all categories"
+    oninput={({ currentTarget }) => (search = currentTarget.value)}
+  />
+  <button onclick={() => (search = "")} class="max-w-4 cursor-pointer"
+    ><RotateCcw /></button
+  >
+</div>
 <div class="mb-4"></div>
 <div class="flex flex-col gap-4">
   {#key filteredExpensesCategories}
