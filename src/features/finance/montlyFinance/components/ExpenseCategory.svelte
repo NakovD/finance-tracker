@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { RotateCcw } from "@lucide/svelte";
   import { sum } from "../../../../infrastructure/utilities/reduceUtility";
   import Inputfield from "../../../common/form/Inputfield.svelte";
   import type { Expense } from "../models/expense";
@@ -9,7 +10,7 @@
     categoryName,
     expenses,
     montlyFinance,
-    initialSearchQuery = ""
+    initialSearchQuery = "",
   }: {
     categoryName: string;
     expenses: Expense[];
@@ -37,13 +38,18 @@
   {#if expenses.length > 0}
     <h2>Expenses for category: {categoryForDisplay}</h2>
     <div class="mb-4"></div>
-    <Inputfield
-      type="text"
-      value={search}
-      class="max-w-xs"
-      placeholder="Search for an expense"
-      oninput={({ currentTarget }) => (search = currentTarget.value)}
-    />
+    <div class="flex items-center gap-4">
+      <Inputfield
+        type="text"
+        value={search}
+        class="max-w-xs"
+        placeholder="Search for an expense"
+        oninput={({ currentTarget }) => (search = currentTarget.value)}
+      />
+      <button onclick={() => (search = "")} class="max-w-4 cursor-pointer"
+        ><RotateCcw /></button
+      >
+    </div>
     <div class="mb-4"></div>
     <ul class="list-none grid grid-cols-2 gap-2">
       {#each filteredExpenses as expense (expense.id)}
