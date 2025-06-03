@@ -1,6 +1,9 @@
 <script lang="ts">
+  import { OctagonX } from "@lucide/svelte";
   import type { Snippet } from "svelte";
   import type { HTMLDialogAttributes } from "svelte/elements";
+
+  
 
   type ModalProps = {
     dialog: HTMLDialogElement;
@@ -37,7 +40,7 @@
 >
   <button
     class="absolute top-5 right-5 text-gray-500 hover:text-gray-700"
-    onclick={() => dialog?.close()}>X</button
+    onclick={() => dialog?.close()}><OctagonX /></button
   >
   {@render children()}
 </dialog>
