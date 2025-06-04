@@ -46,7 +46,7 @@
         placeholder="Search for an expense"
         oninput={({ currentTarget }) => (search = currentTarget.value)}
       />
-      <button onclick={() => (search = "")} class="max-w-4 cursor-pointer"
+      <button onclick={() => (search = "")} class="max-w-4 cursor-pointer text-white hover:text-gray-700"
         ><RotateCcw /></button
       >
     </div>
