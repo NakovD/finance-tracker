@@ -174,6 +174,8 @@ const initDb = () => {
     const objectStore = db.createObjectStore(dbConstants.objectStoreName, {
       keyPath: "id",
     });
+
+    objectStore.createIndex("year", "year", { unique: false });
   };
 };
 
