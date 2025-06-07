@@ -2,7 +2,7 @@ import { dbConstants } from "./constants/constants";
 import type { DbResult } from "./models/dbResult";
 
 export const expenseTrackerDB = {
-  getAll: <T>() => {
+  getAllForYear: <T>(year: number) => {
     const openRequest = indexedDB.open(
       dbConstants.dbName,
       dbConstants.dbVersion
@@ -23,7 +23,8 @@ export const expenseTrackerDB = {
         );
         const resultRequest = transaction
           .objectStore(dbConstants.objectStoreName)
-          .getAll();
+          .index("year")
+          .getAll(year);
 
         resultRequest.onerror = () =>
           reject({
