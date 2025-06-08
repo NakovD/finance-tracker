@@ -42,6 +42,48 @@ export const expenseTrackerDB = {
       };
     });
   },
+  getAvailableYears: () => {
+    const openRequest = indexedDB.open(
+      dbConstants.dbName,
+      dbConstants.dbVersion
+    );
+
+    return new Promise<DbResult<number[]>>((resolve, reject) => {
+      openRequest.onerror = () => {
+        reject({
+          success: false,
+          message: openRequest.error?.message || "Error opening database",
+        });
+      };
+
+      openRequest.onsuccess = () => {
+        const transaction = openRequest.result.transaction(
+          [dbConstants.objectStoreName],
+          "readonly"
+        );
+        const resultRequest = transaction
+          .objectStore(dbConstants.objectStoreName)
+          .getAll();
+
+        resultRequest.onerror = () =>
+          reject({
+            success: false,
+            message: resultRequest.error?.message || "Error reading data",
+          });
+        resultRequest.onsuccess = () => {
+          resolve({
+            success: true,
+            message: "Data read successfully",
+            data: resultRequest.result.reduce<number[]>(
+              (acc, item) => (acc.includes(item.year) ? acc : [...acc, item.year]),
+              []
+            ),
+          });
+          transaction.oncomplete = () => openRequest.result.close();
+        };
+      };
+    });
+  },
   getSingleById: <T>(id: string) => {
     const openRequest = indexedDB.open(
       dbConstants.dbName,
@@ -157,7 +199,7 @@ export const expenseTrackerDB = {
         transaction.oncomplete = () => openRequest.result.close();
       };
     });
-  }
+  },
 } as const;
 
 const initDb = () => {
