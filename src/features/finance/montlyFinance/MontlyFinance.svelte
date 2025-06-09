@@ -5,8 +5,6 @@
   import { expenseTrackerDB } from "../../../infrastructure/db";
   import { handleDbAction } from "../../../infrastructure/db/utilities/handleDbAction";
   import { sum } from "../../../infrastructure/utilities/reduceUtility";
-  import type { ExpenseCategory as ExponseCategoryType } from "./models/expenseCategory";
-  import ExpenseCategory from "./components/ExpenseCategory.svelte";
   import MonthlyExpenses from "./components/MonthlyExpenses.svelte";
 
   let props: { id: string } = $props();
