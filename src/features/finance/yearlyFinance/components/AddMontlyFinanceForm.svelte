@@ -57,4 +57,22 @@
       <p class="text-red-500 text-sm">{form.errors.monthName}</p>
     {/if}
   </Label>
+  <Label id="name" label="Name of expense">
+    <Inputfield
+      id="name"
+      type="text"
+      value={form.values.income}
+      placeholder="Name of expense"
+      error={form.errors.income}
+      oninput={(e) => (form.values.income = e.currentTarget.valueAsNumber)}
+      onblur={() => {
+        form.touchedFields.income = true;
+        // validateName();
+      }}
+    />
+    {#if form.errors.income}
+      <div class="mb-1"></div>
+      <p class="text-red-500 text-sm">{form.errors.income}</p>
+    {/if}
+  </Label>
 </form>
