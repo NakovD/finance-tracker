@@ -4,6 +4,7 @@
   import { expenseTrackerDB } from "../../../infrastructure/db";
   import { handleDbAction } from "../../../infrastructure/db/utilities/handleDbAction";
   import type { MontlyFinance } from "../montlyFinance/models/montlyFinance";
+  import AddMontlyFinanceForm from "./components/AddMontlyFinanceForm.svelte";
 
   const { id }: { id: string } = $props();
 
@@ -19,7 +20,10 @@
 <div class="my-8 mx-auto max-w-2xl">
   <h1 class="text-2xl text-center">2025</h1>
   <div class="mb-8"></div>
-  <p class="">Months:</p>
+  <div>
+    <p class="">Months:</p>
+    <AddMontlyFinanceForm />
+  </div>
   <div class="mb-6"></div>
   <div class="max-w-2xl mx-auto grid grid-cols-4 gap-4">
     {#if $query.isSuccess}
