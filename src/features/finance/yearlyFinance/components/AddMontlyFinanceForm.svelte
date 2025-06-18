@@ -36,6 +36,17 @@
       }
     }
   };
+
+  const validateIncome = () => {
+    const value = form.values.income;
+    if (value === undefined || value === null || isNaN(value)) {
+      form.errors.income = "Income is required.";
+    } else if (typeof value !== "number" || value <= 0) {
+      form.errors.income = "Income must be a positive number.";
+    } else {
+      form.errors.income = "";
+    }
+  };
 </script>
 
 <form>
@@ -57,17 +68,17 @@
       <p class="text-red-500 text-sm">{form.errors.monthName}</p>
     {/if}
   </Label>
-  <Label id="name" label="Name of expense">
+  <Label id="name" label="Income">
     <Inputfield
       id="name"
-      type="text"
+      type="number"
       value={form.values.income}
-      placeholder="Name of expense"
+      placeholder="Income"
       error={form.errors.income}
       oninput={(e) => (form.values.income = e.currentTarget.valueAsNumber)}
       onblur={() => {
         form.touchedFields.income = true;
-        // validateName();
+        validateIncome();
       }}
     />
     {#if form.errors.income}
