@@ -5,8 +5,11 @@
   import { handleDbAction } from "../../../infrastructure/db/utilities/handleDbAction";
   import type { MontlyFinance } from "../montlyFinance/models/montlyFinance";
   import AddMontlyFinanceForm from "./components/AddMontlyFinanceForm.svelte";
+  import Modal from "../../common/modal/Modal.svelte";
 
   const { id }: { id: string } = $props();
+
+  let formModal = $state<HTMLDialogElement>()!;
 
   const query = createQuery<MontlyFinance[]>({
     queryKey: ["all-finances"],
@@ -22,7 +25,9 @@
   <div class="mb-8"></div>
   <div>
     <p class="">Months:</p>
-    <AddMontlyFinanceForm />
+    <Modal bind:dialog={formModal}>
+      <AddMontlyFinanceForm />
+    </Modal>
   </div>
   <div class="mb-6"></div>
   <div class="max-w-2xl mx-auto grid grid-cols-4 gap-4">
