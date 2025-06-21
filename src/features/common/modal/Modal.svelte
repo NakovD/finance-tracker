@@ -39,7 +39,7 @@
   {...rest}
 >
   <button
-    class="absolute top-5 right-5 text-gray-500 hover:text-gray-700"
+    class="absolute cursor-pointer top-5 right-5 text-gray-500 hover:text-gray-700"
     onclick={() => dialog?.close()}><OctagonX /></button
   >
   {@render children()}
