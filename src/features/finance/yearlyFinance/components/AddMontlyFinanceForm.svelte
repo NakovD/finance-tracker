@@ -9,6 +9,8 @@
     MontlyFinanceFormTouchedFields,
   } from "../models/montlyFinanceForm";
 
+  let { onSuccess }: { onSuccess?: VoidFunction } = $props();
+
   let form = $state<{
     values: MontlyFinanceForm;
     errors: MontlyFinanceFormErrors;
@@ -50,6 +52,8 @@
 </script>
 
 <form>
+  <h2>Add a Montly finance</h2>
+  <div class="mb-8"></div>
   <Label id="name" label="Name of expense">
     <Inputfield
       id="name"
@@ -68,6 +72,7 @@
       <p class="text-red-500 text-sm">{form.errors.monthName}</p>
     {/if}
   </Label>
+  <div class="mb-4"></div>
   <Label id="name" label="Income">
     <Inputfield
       id="name"
