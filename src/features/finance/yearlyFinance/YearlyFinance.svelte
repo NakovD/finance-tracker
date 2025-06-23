@@ -6,10 +6,23 @@
   import type { MontlyFinance } from "../montlyFinance/models/montlyFinance";
   import AddMontlyFinanceForm from "./components/AddMontlyFinanceForm.svelte";
   import Modal from "../../common/modal/Modal.svelte";
+  import { CirclePlus } from "@lucide/svelte";
 
   const { id }: { id: string } = $props();
 
   let formModal = $state<HTMLDialogElement>()!;
+
+  let isModalOpen = $state(false);
+
+  const openModal = () => {
+    formModal.showModal();
+    isModalOpen = true;
+  };
+
+  const closeModal = () => {
+    formModal.close();
+    isModalOpen = false;
+  };
 
   const query = createQuery<MontlyFinance[]>({
     queryKey: ["all-finances"],
@@ -23,9 +36,10 @@
 <div class="my-8 mx-auto max-w-2xl">
   <h1 class="text-2xl text-center">2025</h1>
   <div class="mb-8"></div>
-  <div>
-    <p class="">Months:</p>
-    <Modal bind:dialog={formModal}>
+  <div class="flex items-center justify-between mb-4">
+    <p class="text-2xl">Months:</p>
+    <button class="cursor-pointer hover:text-red-900" onclick={openModal}><CirclePlus /></button>
+    <Modal bind:dialog={formModal} onclose={closeModal}>
       <AddMontlyFinanceForm />
     </Modal>
   </div>
