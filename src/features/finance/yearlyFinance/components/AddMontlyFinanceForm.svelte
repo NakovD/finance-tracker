@@ -54,12 +54,12 @@
 <form>
   <h2>Add a Montly finance</h2>
   <div class="mb-8"></div>
-  <Label id="name" label="Name of expense">
+  <Label id="monthName" label="Month Name">
     <Inputfield
-      id="name"
+      id="monthName"
       type="text"
       value={form.values.monthName}
-      placeholder="Name of expense"
+      placeholder="Month Name"
       error={form.errors.monthName}
       oninput={(e) => (form.values.monthName = e.currentTarget.value)}
       onblur={() => {
