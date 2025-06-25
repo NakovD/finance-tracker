@@ -73,9 +73,9 @@
     {/if}
   </Label>
   <div class="mb-4"></div>
-  <Label id="name" label="Income">
+  <Label id="income" label="Income">
     <Inputfield
-      id="name"
+      id="income"
       type="number"
       value={form.values.income}
       placeholder="Income"
