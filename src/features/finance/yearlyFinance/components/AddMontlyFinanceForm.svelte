@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { createMutation } from "@tanstack/svelte-query";
   import Inputfield from "../../../common/form/Inputfield.svelte";
   import Label from "../../../common/form/Label.svelte";
   import { months } from "../constants/months";
@@ -8,8 +9,10 @@
     MontlyFinanceFormErrors,
     MontlyFinanceFormTouchedFields,
   } from "../models/montlyFinanceForm";
+  import type { MontlyFinance } from "../../montlyFinance/models/montlyFinance";
+  import Button from "../../../common/button/Button.svelte";
 
-  let { onSuccess }: { onSuccess?: VoidFunction } = $props();
+  let {year, onSuccess }: { year: number; onSuccess?: VoidFunction } = $props();
 
   let form = $state<{
     values: MontlyFinanceForm;
@@ -26,6 +29,17 @@
       monthName: false,
     },
   });
+
+  const mutation = createMutation<unknown, Error, MontlyFinance>({});
+
+  const handleSubmit = () =>
+    $mutation.mutate({
+      id: crypto.randomUUID(),
+      name: form.values.monthName,
+      income: form.values.income,
+      expenses: [],
+      year,
+    });
 
   const validateMonthName = () => {
     if (!form.values.monthName) {
@@ -51,7 +65,7 @@
   };
 </script>
 
-<form>
+<form >
   <h2>Add a Montly finance</h2>
   <div class="mb-8"></div>
   <Label id="monthName" label="Month Name">
@@ -91,4 +105,5 @@
       <p class="text-red-500 text-sm">{form.errors.income}</p>
     {/if}
   </Label>
+  <Button onclick={handleSubmit}>Add Montly Finance</Button>
 </form>
