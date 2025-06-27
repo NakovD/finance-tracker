@@ -38,9 +38,11 @@
   <div class="mb-8"></div>
   <div class="flex items-center justify-between mb-4">
     <p class="text-2xl">Months:</p>
-    <button class="cursor-pointer hover:text-red-900" onclick={openModal}><CirclePlus /></button>
+    <button class="cursor-pointer hover:text-red-900" onclick={openModal}
+      ><CirclePlus /></button
+    >
     <Modal bind:dialog={formModal} onclose={closeModal}>
-      <AddMontlyFinanceForm />
+      <AddMontlyFinanceForm onSuccess={closeModal} year={+id} />
     </Modal>
   </div>
   <div class="mb-6"></div>
