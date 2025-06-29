@@ -11,8 +11,11 @@
   } from "../models/montlyFinanceForm";
   import type { MontlyFinance } from "../../montlyFinance/models/montlyFinance";
   import Button from "../../../common/button/Button.svelte";
+  import { expenseTrackerDB } from "../../../../infrastructure/db";
+  import { handleDbAction } from "../../../../infrastructure/db/utilities/handleDbAction";
 
-  let {year, onSuccess }: { year: number; onSuccess?: VoidFunction } = $props();
+  let { year, onSuccess }: { year: number; onSuccess?: VoidFunction } =
+    $props();
 
   let form = $state<{
     values: MontlyFinanceForm;
@@ -30,23 +33,29 @@
     },
   });
 
-  const mutation = createMutation<unknown, Error, MontlyFinance>({});
+  const mutation = createMutation<MontlyFinance, Error, MontlyFinance>({
+    mutationFn: (monthlyFinance) =>
+      handleDbAction(() => expenseTrackerDB.addSingle(monthlyFinance)),
+  });
 
   const handleSubmit = () =>
-    $mutation.mutate({
-      id: crypto.randomUUID(),
-      name: form.values.monthName,
-      income: form.values.income,
-      expenses: [],
-      year,
-    });
+    $mutation.mutate(
+      {
+        id: crypto.randomUUID(),
+        name: form.values.monthName,
+        income: form.values.income,
+        expenses: [],
+        year,
+      },
+      { onSuccess: () => onSuccess?.() }
+    );
 
   const validateMonthName = () => {
     if (!form.values.monthName) {
       form.errors.monthName = "Month name is required.";
     } else {
       if (months.some((m) => m === form.values.monthName))
-        form.errors.monthName = "";
+        form.errors.monthName = undefined;
       else {
         form.errors.monthName = "Invalid month name.";
       }
@@ -60,12 +69,14 @@
     } else if (typeof value !== "number" || value <= 0) {
       form.errors.income = "Income must be a positive number.";
     } else {
-      form.errors.income = "";
+      form.errors.income = undefined;
     }
   };
+
+  $inspect(form);
 </script>
 
-<form >
+<form>
   <h2>Add a Montly finance</h2>
   <div class="mb-8"></div>
   <Label id="monthName" label="Month Name">
@@ -105,5 +116,6 @@
       <p class="text-red-500 text-sm">{form.errors.income}</p>
     {/if}
   </Label>
+  <div class="mb-6"></div>
   <Button onclick={handleSubmit}>Add Montly Finance</Button>
 </form>
