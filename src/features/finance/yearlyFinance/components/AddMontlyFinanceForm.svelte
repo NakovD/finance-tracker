@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { createMutation } from "@tanstack/svelte-query";
+  import { createMutation, useQueryClient } from "@tanstack/svelte-query";
   import Inputfield from "../../../common/form/Inputfield.svelte";
   import Label from "../../../common/form/Label.svelte";
   import { months } from "../constants/months";
@@ -33,9 +33,16 @@
     },
   });
 
+  const qc = useQueryClient();
+
   const mutation = createMutation<MontlyFinance, Error, MontlyFinance>({
     mutationFn: (monthlyFinance) =>
       handleDbAction(() => expenseTrackerDB.addSingle(monthlyFinance)),
+    onSuccess: () => {
+      qc.invalidateQueries({
+        queryKey: ["all-finances"],
+      });
+    },
   });
 
   const handleSubmit = () =>
@@ -72,11 +79,9 @@
       form.errors.income = undefined;
     }
   };
-
-  $inspect(form);
 </script>
 
-<form>
+<form onsubmit={handleSubmit}>
   <h2>Add a Montly finance</h2>
   <div class="mb-8"></div>
   <Label id="monthName" label="Month Name">
@@ -117,5 +122,5 @@
     {/if}
   </Label>
   <div class="mb-6"></div>
-  <Button onclick={handleSubmit}>Add Montly Finance</Button>
+  <Button type="button" onclick={handleSubmit}>Add Montly Finance</Button>
 </form>
