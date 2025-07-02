@@ -14,6 +14,16 @@
 
   let isModalOpen = $state(false);
 
+  const query = createQuery<MontlyFinance[]>({
+    queryKey: ["all-finances", id],
+    queryFn: () =>
+      handleDbAction(() =>
+        expenseTrackerDB.getAllForYear<MontlyFinance[]>(+id)
+      ),
+    staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 10,
+  });
+
   const openModal = () => {
     formModal.showModal();
     isModalOpen = true;
@@ -23,20 +33,10 @@
     formModal.close();
     isModalOpen = false;
   };
-
-  const query = createQuery<MontlyFinance[]>({
-    queryKey: ["all-finances"],
-    queryFn: () =>
-      handleDbAction(() =>
-        expenseTrackerDB.getAllForYear<MontlyFinance[]>(+id)
-      ),
-      staleTime: 1000 * 60 * 5,
-      gcTime: 1000 * 60 * 10,
-  });
 </script>
 
 <div class="my-8 mx-auto max-w-2xl">
-  <h1 class="text-2xl text-center">2025</h1>
+  <h1 class="text-2xl text-center">{id}</h1>
   <div class="mb-8"></div>
   <div class="flex items-center justify-between mb-4">
     <p class="text-2xl">Months:</p>
