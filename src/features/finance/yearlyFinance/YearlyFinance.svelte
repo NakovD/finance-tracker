@@ -53,7 +53,7 @@
       {#if $query.data.length > 0}
         {#each $query.data as montlyExpense}
           <Link
-            to="/montly-finance/147a2270-0c34-4c9e-bae7-7d16fcdebf13"
+            to={`/montly-finance/${montlyExpense.id}`}
             class="shadow-md rounded-lg p-4 bg-amber-950 text-white hover:bg-amber-800 transition duration-300 ease-in-out"
           >
             <p class="text-xl font-semibold">{montlyExpense.name}</p>
