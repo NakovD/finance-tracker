@@ -49,7 +49,11 @@
   </div>
   <div class="mb-6"></div>
   <div class="max-w-2xl mx-auto grid grid-cols-4 gap-4">
-    {#if $query.isSuccess}
+    {#if $query.isLoading}
+      <p>Loading...</p>
+    {:else if $query.isError}
+      <p class="text-red-500">Failed to load data.</p>
+    {:else if $query.isSuccess}
       {#if $query.data.length > 0}
         {#each $query.data as montlyExpense}
           <Link
@@ -59,8 +63,7 @@
             <p class="text-xl font-semibold">{montlyExpense.name}</p>
           </Link>
         {/each}
-      {/if}
-      {#if $query.data.length === 0}
+      {:else}
         <p class="text-gray-500">No data available for this year.</p>
       {/if}
     {/if}
