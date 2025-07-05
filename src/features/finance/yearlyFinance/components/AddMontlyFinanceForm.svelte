@@ -45,7 +45,8 @@
     },
   });
 
-  const handleSubmit = () =>
+  const handleSubmit = (e: SubmitEvent) => {
+    e.preventDefault();
     $mutation.mutate(
       {
         id: crypto.randomUUID(),
@@ -56,6 +57,7 @@
       },
       { onSuccess: () => onSuccess?.() }
     );
+  };
 
   const validateMonthName = () => {
     if (!form.values.monthName) {
@@ -122,5 +124,5 @@
     {/if}
   </Label>
   <div class="mb-6"></div>
-  <Button type="button" onclick={handleSubmit}>Add Montly Finance</Button>
+  <Button type="submit">Add Montly Finance</Button>
 </form>
