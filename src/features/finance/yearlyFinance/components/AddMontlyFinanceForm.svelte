@@ -5,11 +5,11 @@
   import { months } from "../constants/months";
 
   import type {
-    MontlyFinanceForm,
-    MontlyFinanceFormErrors,
-    MontlyFinanceFormTouchedFields,
+    MonthlyFinanceForm,
+    MonthlyFinanceFormErrors,
+    MonthlyFinanceFormTouchedFields,
   } from "../models/montlyFinanceForm";
-  import type { MontlyFinance } from "../../montlyFinance/models/montlyFinance";
+  import type { MonthlyFinance } from "../../montlyFinance/models/montlyFinance";
   import Button from "../../../common/button/Button.svelte";
   import { expenseTrackerDB } from "../../../../infrastructure/db";
   import { handleDbAction } from "../../../../infrastructure/db/utilities/handleDbAction";
@@ -18,9 +18,9 @@
     $props();
 
   let form = $state<{
-    values: MontlyFinanceForm;
-    errors: MontlyFinanceFormErrors;
-    touchedFields: MontlyFinanceFormTouchedFields;
+    values: MonthlyFinanceForm;
+    errors: MonthlyFinanceFormErrors;
+    touchedFields: MonthlyFinanceFormTouchedFields;
   }>({
     values: {
       monthName: "",
@@ -35,7 +35,7 @@
 
   const qc = useQueryClient();
 
-  const mutation = createMutation<MontlyFinance, Error, MontlyFinance>({
+  const mutation = createMutation<MonthlyFinance, Error, MonthlyFinance>({
     mutationFn: (monthlyFinance) =>
       handleDbAction(() => expenseTrackerDB.addSingle(monthlyFinance)),
     onSuccess: () => {
@@ -84,7 +84,7 @@
 </script>
 
 <form onsubmit={handleSubmit}>
-  <h2>Add a Montly finance</h2>
+  <h2>Add a Monthly finance</h2>
   <div class="mb-8"></div>
   <Label id="monthName" label="Month Name">
     <Inputfield
@@ -124,5 +124,5 @@
     {/if}
   </Label>
   <div class="mb-6"></div>
-  <Button type="submit">Add Montly Finance</Button>
+  <Button type="submit">Add Monthly Finance</Button>
 </form>
