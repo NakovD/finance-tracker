@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { MontlyFinance } from "../models/montlyFinance";
+  import type { MonthlyFinance } from "../models/monthlyFinance";
   import { useQueryClient, createMutation } from "@tanstack/svelte-query";
   import type { Expense } from "../models/expense";
   import { formatDateForDateInput } from "../utils/formatDateForDateInput";
@@ -19,7 +19,7 @@
     onSuccess,
     onError,
   }: {
-    month: MontlyFinance;
+    month: MonthlyFinance;
     expense?: Expense;
     onSuccess?: VoidFunction;
     onError?: VoidFunction;
@@ -60,7 +60,7 @@
     category?: string;
   }>({});
 
-  let mutation = createMutation<MontlyFinance, Error, Expense>({
+  let mutation = createMutation<MonthlyFinance, Error, Expense>({
     mutationFn: (expense: Expense) =>
       handleDbAction(() =>
         expenseTrackerDB.editSingle({

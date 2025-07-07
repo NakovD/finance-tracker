@@ -1,10 +1,10 @@
 <script lang="ts">
   import Button from "../../../common/button/Button.svelte";
   import Modal from "../../../common/modal/Modal.svelte";
-  import type { MontlyFinance } from "../models/montlyFinance";
+  import type { MonthlyFinance } from "../models/monthlyFinance";
   import ExpenseForm from "./ExpenseForm.svelte";
 
-  const { month }: { month: MontlyFinance } = $props();
+  const { month }: { month: MonthlyFinance } = $props();
   let dialog = $state<HTMLDialogElement>()!;
   let isOpen = $state(false);
 

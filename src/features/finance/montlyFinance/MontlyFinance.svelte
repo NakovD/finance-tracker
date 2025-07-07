@@ -1,6 +1,6 @@
 <script lang="ts">
   import { createQuery } from "@tanstack/svelte-query";
-  import type { MontlyFinance } from "./models/montlyFinance";
+  import type { MonthlyFinance } from "./models/monthlyFinance";
   import AddExpenseForm from "./components/AddExpenseForm.svelte";
   import { expenseTrackerDB } from "../../../infrastructure/db";
   import { handleDbAction } from "../../../infrastructure/db/utilities/handleDbAction";
@@ -9,11 +9,11 @@
 
   let props: { id: string } = $props();
 
-  const query = createQuery<MontlyFinance>({
+  const query = createQuery<MonthlyFinance>({
     queryKey: ["montly-finance", "147a2270-0c34-4c9e-bae7-7d16fcdebf13"],
     queryFn: () =>
       handleDbAction(() =>
-        expenseTrackerDB.getSingleById<MontlyFinance>(
+        expenseTrackerDB.getSingleById<MonthlyFinance>(
           "147a2270-0c34-4c9e-bae7-7d16fcdebf13"
         )
       ),

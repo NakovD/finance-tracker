@@ -2,14 +2,14 @@
   import Inputfield from "../../../common/form/Inputfield.svelte";
   import type { Expense } from "../models/expense";
   import type { ExpenseCategory as ExpenseCategoryType } from "../models/expenseCategory";
-  import type { MontlyFinance } from "../models/montlyFinance";
+  import type { MonthlyFinance } from "../models/monthlyFinance";
   import ExpenseCategory from "./ExpenseCategory.svelte";
   import { RotateCcw } from "@lucide/svelte";
 
   const {
     expenses,
     monthFinance,
-  }: { expenses: Expense[]; monthFinance: MontlyFinance } = $props();
+  }: { expenses: Expense[]; monthFinance: MonthlyFinance } = $props();
 
   const groupedByCategories = Object.groupBy(expenses, (e) => e.category);
   const categories = Object.keys(groupedByCategories) as ExpenseCategoryType[];

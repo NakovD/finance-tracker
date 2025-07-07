@@ -8,11 +8,11 @@
     MonthlyFinanceForm,
     MonthlyFinanceFormErrors,
     MonthlyFinanceFormTouchedFields,
-  } from "../models/montlyFinanceForm";
-  import type { MonthlyFinance } from "../../montlyFinance/models/montlyFinance";
+  } from "../models/monthlyFinanceForm";
   import Button from "../../../common/button/Button.svelte";
   import { expenseTrackerDB } from "../../../../infrastructure/db";
   import { handleDbAction } from "../../../../infrastructure/db/utilities/handleDbAction";
+  import type { MonthlyFinance } from "../../montlyFinance/models/monthlyFinance";
 
   let { year, onSuccess }: { year: number; onSuccess?: VoidFunction } =
     $props();

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { createMutation, useQueryClient } from "@tanstack/svelte-query";
   import type { Expense } from "../models/expense";
-  import type { MontlyFinance } from "../models/montlyFinance";
+  import type { MonthlyFinance } from "../models/monthlyFinance";
   import ExpenseForm from "./ExpenseForm.svelte";
   import Button from "../../../common/button/Button.svelte";
   import Modal from "../../../common/modal/Modal.svelte";
@@ -9,7 +9,7 @@
   import { expenseTrackerDB } from "../../../../infrastructure/db";
   import { handleDbAction } from "../../../../infrastructure/db/utilities/handleDbAction";
 
-  const { expense, month }: { expense: Expense; month: MontlyFinance } =
+  const { expense, month }: { expense: Expense; month: MonthlyFinance } =
     $props();
 
   const qc = useQueryClient();
@@ -33,7 +33,7 @@
     deleteDialog.close();
   };
 
-  let mutation = createMutation<MontlyFinance, Error, void>({
+  let mutation = createMutation<MonthlyFinance, Error, void>({
     mutationFn: () =>
       handleDbAction(() =>
         expenseTrackerDB.editSingle({

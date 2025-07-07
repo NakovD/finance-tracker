@@ -1,6 +1,6 @@
 import type { Expense } from "./expense";
 
-export type MontlyFinance = {
+export type MonthlyFinance = {
   id: string;
   name: string;
   year: number;

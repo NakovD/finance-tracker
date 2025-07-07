@@ -3,7 +3,7 @@
   import { sum } from "../../../../infrastructure/utilities/reduceUtility";
   import Inputfield from "../../../common/form/Inputfield.svelte";
   import type { Expense } from "../models/expense";
-  import type { MontlyFinance } from "../models/montlyFinance";
+  import type { MonthlyFinance } from "../models/monthlyFinance";
   import ExpenseListItem from "./ExpenseListItem.svelte";
 
   let {
@@ -14,7 +14,7 @@
   }: {
     categoryName: string;
     expenses: Expense[];
-    montlyFinance: MontlyFinance;
+    montlyFinance: MonthlyFinance;
     initialSearchQuery?: string;
   } = $props();
 
