@@ -4,6 +4,7 @@
   import MontlyFinance from "./features/finance/montlyFinance/MontlyFinance.svelte";
   import YearlyFinance from "./features/finance/yearlyFinance/YearlyFinance.svelte";
   import AllYears from "./features/finance/overview/AllYears.svelte";
+  import { Toaster } from "svelte-sonner";
 
   const queryClient = new QueryClient({
     defaultOptions: {
@@ -16,6 +17,7 @@
 </script>
 
 <QueryClientProvider client={queryClient}>
+  <Toaster richColors={true} theme="dark" position="top-left" />
   <main>
     <Router>
       <Route path="/montly-finance/:id" let:params>
