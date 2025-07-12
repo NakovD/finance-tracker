@@ -13,6 +13,7 @@
   import { expenseTrackerDB } from "../../../../infrastructure/db";
   import { handleDbAction } from "../../../../infrastructure/db/utilities/handleDbAction";
   import type { MonthlyFinance } from "../../montlyFinance/models/monthlyFinance";
+  import { toaster } from "../../../common/toaster/toaster";
 
   let { year, onSuccess }: { year: number; onSuccess?: VoidFunction } =
     $props();
@@ -39,9 +40,13 @@
     mutationFn: (monthlyFinance) =>
       handleDbAction(() => expenseTrackerDB.addSingle(monthlyFinance)),
     onSuccess: () => {
+      toaster.showSuccess("Monthly finance added successfully.");
       qc.invalidateQueries({
         queryKey: ["all-finances"],
       });
+    },
+    onError: () => {
+      toaster.showError("Failed to add monthly finance.");
     },
   });
 
