@@ -10,6 +10,7 @@
   import Label from "../../../common/form/Label.svelte";
   import Textarea from "../../../common/form/Textarea.svelte";
   import type { ExpenseCategory } from "../models/expenseCategory";
+  import { toaster } from "../../../common/toaster/toaster";
 
   const today = new Date();
 
@@ -68,6 +69,8 @@
           expenses: handleExpenseUpdateAdd(expense, month.expenses),
         })
       ),
+      onSuccess: () => toaster.showSuccess("Expense saved successfully!"),
+      onError: () => toaster.showError("Failed to save expense"),
   });
 
   const validateName = () => {
