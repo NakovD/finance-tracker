@@ -7,16 +7,12 @@
   import { sum } from "../../../infrastructure/utilities/reduceUtility";
   import MonthlyExpenses from "./components/MonthlyExpenses.svelte";
 
-  let props: { id: string } = $props();
+  let { id }: { id: string } = $props();
 
   const query = createQuery<MonthlyFinance>({
-    queryKey: ["montly-finance", "147a2270-0c34-4c9e-bae7-7d16fcdebf13"],
+    queryKey: ["montly-finance", id],
     queryFn: () =>
-      handleDbAction(() =>
-        expenseTrackerDB.getSingleById<MonthlyFinance>(
-          "147a2270-0c34-4c9e-bae7-7d16fcdebf13"
-        )
-      ),
+      handleDbAction(() => expenseTrackerDB.getSingleById<MonthlyFinance>(id)),
   });
 </script>
 
