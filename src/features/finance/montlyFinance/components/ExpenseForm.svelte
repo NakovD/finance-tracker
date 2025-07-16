@@ -173,7 +173,7 @@
   );
 </script>
 
-<form>
+<form onsubmit={handleSubmit}>
   <h2 class="font-bold">Add an expense</h2>
   <div class="mb-5"></div>
   <Label id="name" label="Name of expense">
@@ -297,7 +297,6 @@
     disabled={!canSubmit}
     type="button"
     class="bg-blue-500 hover:bg-blue-700 disabled:bg-blue-400 text-white font-bold py-2 px-4 rounded"
-    onclick={handleSubmit}
     >{expense ? "Edit expense" : "Add new expense"}</button
   >
 </form>
