@@ -3,8 +3,6 @@
   import type { Snippet } from "svelte";
   import type { HTMLDialogAttributes } from "svelte/elements";
 
-  
-
   type ModalProps = {
     dialog: HTMLDialogElement;
     children: Snippet<[]>;

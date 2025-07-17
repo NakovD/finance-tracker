@@ -12,7 +12,7 @@
   import Button from "../../../common/button/Button.svelte";
   import { expenseTrackerDB } from "../../../../infrastructure/db";
   import { handleDbAction } from "../../../../infrastructure/db/utilities/handleDbAction";
-  import type { MonthlyFinance } from "../../montlyFinance/models/monthlyFinance";
+  import type { MonthlyFinance } from "../../monthlyFinance/models/monthlyFinance";
   import { toaster } from "../../../common/toaster/toaster";
 
   let { year, onSuccess }: { year: number; onSuccess?: VoidFunction } =

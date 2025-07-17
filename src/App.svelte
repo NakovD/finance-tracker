@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Router, Route } from "svelte-routing";
   import { QueryClient, QueryClientProvider } from "@tanstack/svelte-query";
-  import MontlyFinance from "./features/finance/montlyFinance/MontlyFinance.svelte";
+  import MontlyFinance from "./features/finance/monthlyFinance/MonthlyFinance.svelte";
   import YearlyFinance from "./features/finance/yearlyFinance/YearlyFinance.svelte";
   import AllYears from "./features/finance/overview/AllYears.svelte";
   import { Toaster } from "svelte-sonner";
