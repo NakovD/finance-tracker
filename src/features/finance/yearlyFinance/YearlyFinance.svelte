@@ -12,8 +12,6 @@
 
   let formModal = $state<HTMLDialogElement>()!;
 
-  let isModalOpen = $state(false);
-
   const query = createQuery<MonthlyFinance[]>({
     queryKey: ["all-finances", id],
     queryFn: () =>
@@ -24,15 +22,9 @@
     gcTime: 1000 * 60 * 10,
   });
 
-  const openModal = () => {
-    formModal.showModal();
-    isModalOpen = true;
-  };
+  const openModal = () => formModal.showModal();
 
-  const closeModal = () => {
-    formModal.close();
-    isModalOpen = false;
-  };
+  const closeModal = () => formModal.close();
 </script>
 
 <div class="my-8 mx-auto max-w-2xl">
