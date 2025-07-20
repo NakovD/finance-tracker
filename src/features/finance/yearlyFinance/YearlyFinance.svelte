@@ -12,6 +12,8 @@
 
   let formModal = $state<HTMLDialogElement>()!;
 
+  let isOpen = $state(false);
+
   const query = createQuery<MonthlyFinance[]>({
     queryKey: ["all-finances", id],
     queryFn: () =>
@@ -22,9 +24,15 @@
     gcTime: 1000 * 60 * 10,
   });
 
-  const openModal = () => formModal.showModal();
+  const openModal = () => {
+    isOpen = true;
+    formModal.showModal();
+  };
 
-  const closeModal = () => formModal.close();
+  const closeModal = () => {
+    isOpen = false;
+    formModal.close();
+  };
 </script>
 
 <div class="my-8 mx-auto max-w-2xl">
@@ -36,7 +44,9 @@
       ><CirclePlus /></button
     >
     <Modal bind:dialog={formModal} onclose={closeModal}>
-      <AddMontlyFinanceForm onSuccess={closeModal} year={+id} />
+      {#key isOpen}
+        <AddMontlyFinanceForm onSuccess={closeModal} year={+id} />
+      {/key}
     </Modal>
   </div>
   <div class="mb-6"></div>
