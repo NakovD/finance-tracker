@@ -46,13 +46,12 @@
   const handleDeleteExpense = () => {
     $mutation.mutate(undefined, {
       onSuccess: () => {
-        handleCloseDeleteDialog();
         qc.invalidateQueries({
           queryKey: ["montly-finance", month.id],
         });
       },
+      onSettled: () => handleCloseDeleteDialog(),
     });
-    handleCloseDeleteDialog();
   };
 </script>
 
