@@ -47,7 +47,7 @@
     $mutation.mutate(undefined, {
       onSuccess: () => {
         qc.invalidateQueries({
-          queryKey: ["montly-finance", month.id],
+          queryKey: ["monthly-finance", month.id],
         });
       },
       onSettled: () => handleCloseDeleteDialog(),

@@ -10,7 +10,7 @@
   let { id }: { id: string } = $props();
 
   const query = createQuery<MonthlyFinance>({
-    queryKey: ["montly-finance", id],
+    queryKey: ["monthly-finance", id],
     queryFn: () =>
       handleDbAction(() => expenseTrackerDB.getSingleById<MonthlyFinance>(id)),
   });
