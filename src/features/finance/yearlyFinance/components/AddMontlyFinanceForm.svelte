@@ -42,7 +42,7 @@
     onSuccess: () => {
       toaster.showSuccess("Monthly finance added successfully.");
       qc.invalidateQueries({
-        queryKey: ["all-finances"],
+        queryKey: ["all-finances", year],
       });
     },
     onError: () => {
