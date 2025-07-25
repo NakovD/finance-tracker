@@ -4,7 +4,7 @@
   import { expenseTrackerDB } from "../../../infrastructure/db";
   import { handleDbAction } from "../../../infrastructure/db/utilities/handleDbAction";
   import type { MonthlyFinance } from "../monthlyFinance/models/monthlyFinance";
-  import AddMontlyFinanceForm from "./components/AddMontlyFinanceForm.svelte";
+  import AddMonthlyFinanceForm from "./components/AddMonthlyFinanceForm.svelte";
   import Modal from "../../common/modal/Modal.svelte";
   import { CirclePlus } from "@lucide/svelte";
 
@@ -45,7 +45,7 @@
     >
     <Modal bind:dialog={formModal} onclose={closeModal}>
       {#key isOpen}
-        <AddMontlyFinanceForm onSuccess={closeModal} year={+id} />
+        <AddMonthlyFinanceForm onSuccess={closeModal} year={+id} />
       {/key}
     </Modal>
   </div>
