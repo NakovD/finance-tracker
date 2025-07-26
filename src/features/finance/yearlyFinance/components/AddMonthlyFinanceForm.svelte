@@ -2,7 +2,6 @@
   import { createMutation, useQueryClient } from "@tanstack/svelte-query";
   import Inputfield from "../../../common/form/Inputfield.svelte";
   import Label from "../../../common/form/Label.svelte";
-  import { months } from "../constants/months";
 
   import type {
     MonthlyFinanceForm,
@@ -14,6 +13,7 @@
   import { handleDbAction } from "../../../../infrastructure/db/utilities/handleDbAction";
   import type { MonthlyFinance } from "../../monthlyFinance/models/monthlyFinance";
   import { toaster } from "../../../common/toaster/toaster";
+  import { monthlyFinanceFormValidator } from "../utilities/montlyFinanceFormValidator";
 
   let { year, onSuccess }: { year: number; onSuccess?: VoidFunction } =
     $props();
@@ -63,29 +63,6 @@
       { onSuccess: () => onSuccess?.() }
     );
   };
-
-  const validateMonthName = () => {
-    if (!form.values.monthName) {
-      form.errors.monthName = "Month name is required.";
-    } else {
-      if (months.some((m) => m === form.values.monthName))
-        form.errors.monthName = undefined;
-      else {
-        form.errors.monthName = "Invalid month name.";
-      }
-    }
-  };
-
-  const validateIncome = () => {
-    const value = form.values.income;
-    if (value === undefined || value === null || isNaN(value)) {
-      form.errors.income = "Income is required.";
-    } else if (typeof value !== "number" || value <= 0) {
-      form.errors.income = "Income must be a positive number.";
-    } else {
-      form.errors.income = undefined;
-    }
-  };
 </script>
 
 <form onsubmit={handleSubmit}>
@@ -101,7 +78,9 @@
       oninput={(e) => (form.values.monthName = e.currentTarget.value)}
       onblur={() => {
         form.touchedFields.monthName = true;
-        validateMonthName();
+        form.errors.monthName = monthlyFinanceFormValidator.validateMonthName(
+          form.values.monthName
+        );
       }}
     />
     {#if form.errors.monthName}
@@ -120,7 +99,9 @@
       oninput={(e) => (form.values.income = e.currentTarget.valueAsNumber)}
       onblur={() => {
         form.touchedFields.income = true;
-        validateIncome();
+        form.errors.income = monthlyFinanceFormValidator.validateIncome(
+          form.values.income
+        );
       }}
     />
     {#if form.errors.income}
