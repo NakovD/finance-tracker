@@ -11,6 +11,7 @@
   import Textarea from "../../../common/form/Textarea.svelte";
   import type { ExpenseCategory } from "../models/expenseCategory";
   import { toaster } from "../../../common/toaster/toaster";
+  import { expenseFormValidator } from "../utilities/expenseFormValidator";
 
   const today = new Date();
 
@@ -73,47 +74,6 @@
       onError: () => toaster.showError("Failed to save expense"),
   });
 
-  const validateName = () => {
-    if (nameField.length < 3) {
-      errors.name = "Name must be at least 3 characters long";
-    } else {
-      errors.name = undefined;
-    }
-  };
-
-  const validateAmount = () => {
-    const value = Number(amountField);
-
-    if (isNaN(value) || value <= 0) {
-      errors.amount = "Please enter a valid amount";
-    } else {
-      errors.amount = undefined;
-    }
-  };
-
-  const validateDate = () => {
-    if (!dateField) {
-      errors.date = "Please select a date";
-    } else {
-      errors.date = undefined;
-    }
-  };
-
-  const validateDescription = () => {
-    if (descriptionField.length > 0 && descriptionField.length < 10) {
-      errors.description = "Description must be at least 10 characters long";
-      return;
-    }
-    errors.description = undefined;
-  };
-
-  const validateCategory = () => {
-    if (!categoryField) {
-      errors.category = "Please select a category";
-    } else {
-      errors.category = undefined;
-    }
-  };
 
   const resetForm = () => {
     nameField = "";
@@ -186,7 +146,7 @@
       oninput={(e) => (nameField = e.currentTarget.value)}
       onblur={() => {
         touchedFields.name = true;
-        validateName();
+        errors.name = expenseFormValidator.validateName(nameField);
       }}
     />
     {#if errors.name}
@@ -205,7 +165,7 @@
       oninput={(e) => (amountField = e.currentTarget.value)}
       onblur={() => {
         touchedFields.amount = true;
-        validateAmount();
+        errors.amount = expenseFormValidator.validateAmount(amountField);
       }}
     />
     {#if errors.amount}
@@ -224,10 +184,10 @@
       oninput={(e) => (dateField = e.currentTarget.value)}
       onblur={() => {
         touchedFields.date = true;
-        validateDate();
+        errors.date = expenseFormValidator.validateDate(dateField);
       }}
     />
-    {#if errors.amount}
+    {#if errors.date}
       <div class="mb-1"></div>
       <p class="text-red-500 text-sm">{errors.date}</p>
     {/if}
@@ -242,7 +202,7 @@
       oninput={(e) => (descriptionField = e.currentTarget.value)}
       onblur={() => {
         touchedFields.description = true;
-        validateDescription();
+        errors.description = expenseFormValidator.validateDescription(descriptionField);
       }}
     />
     {#if errors.description}
@@ -257,11 +217,11 @@
       bind:value={categoryField}
       onblur={() => {
         touchedFields.category = true;
-        validateCategory();
+        errors.category = expenseFormValidator.validateCategory(categoryField);
       }}
       onchange={() => {
         touchedFields.category = true;
-        validateCategory();
+        errors.category = expenseFormValidator.validateCategory(categoryField);
       }}
     >
       <option class="text-neutral-400 bg-black" value="" disabled selected>
