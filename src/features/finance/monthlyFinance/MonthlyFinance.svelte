@@ -6,6 +6,7 @@
   import { handleDbAction } from "../../../infrastructure/db/utilities/handleDbAction";
   import { sum } from "../../../infrastructure/utilities/reduceUtility";
   import MonthlyExpenses from "./components/MonthlyExpenses.svelte";
+  import Loader from "../../common/loader/Loader.svelte";
 
   let { id }: { id: string } = $props();
 
@@ -17,7 +18,7 @@
 </script>
 
 {#if $query.isLoading}
-  <p>Loading...</p>
+  <Loader />
 {:else if $query.isError}
   <p>Error: {$query.error.message}</p>
 {:else if $query.isSuccess}
