@@ -7,6 +7,7 @@
   import AddMonthlyFinanceForm from "./components/AddMonthlyFinanceForm.svelte";
   import Modal from "../../common/modal/Modal.svelte";
   import { CirclePlus } from "@lucide/svelte";
+  import Loader from "../../common/loader/Loader.svelte";
 
   const { id }: { id: string } = $props();
 
@@ -52,7 +53,7 @@
   <div class="mb-6"></div>
   <div class="max-w-2xl mx-auto grid grid-cols-4 gap-4">
     {#if $query.isLoading}
-      <p>Loading...</p>
+      <Loader />
     {:else if $query.isError}
       <p class="text-red-500">Failed to load data.</p>
     {:else if $query.isSuccess}
