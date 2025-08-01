@@ -3,6 +3,7 @@
   import { Link } from "svelte-routing";
   import { expenseTrackerDB } from "../../../infrastructure/db";
   import { handleDbAction } from "../../../infrastructure/db/utilities/handleDbAction";
+  import Loader from "../../common/loader/Loader.svelte";
 
   const query = createQuery<number[]>({
     queryKey: ["all-finances"],
@@ -15,7 +16,7 @@
   <div class="mb-4"></div>
   <div class="max-w-2xl mx-auto grid grid-cols-4 gap-4">
     {#if $query.isLoading}
-      <p>Loading...</p>
+      <Loader />
     {:else if $query.isError}
       <p class="text-red-500">Failed to load data.</p>
     {:else if $query.isSuccess}
