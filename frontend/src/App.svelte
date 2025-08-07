@@ -5,6 +5,7 @@
   import YearlyFinance from "./features/finance/yearlyFinance/YearlyFinance.svelte";
   import AllYears from "./features/finance/overview/AllYears.svelte";
   import { Toaster } from "svelte-sonner";
+  import Login from "./features/auth/login/Login.svelte";
 
   const queryClient = new QueryClient({
     defaultOptions: {
@@ -27,6 +28,7 @@
         <YearlyFinance id={params.id} /></Route
       >
       <Route path="/"><AllYears /></Route>
+      <Route path="/login"><Login /></Route>
     </Router>
   </main>
 </QueryClientProvider>
