@@ -1,6 +1,29 @@
 <script lang="ts">
   import Button from "../../common/button/Button.svelte";
   import Inputfield from "../../common/form/Inputfield.svelte";
+  import Label from "../../common/form/Label.svelte";
+  import type {
+    LoginForm,
+    LoginFormErrors,
+    LoginFormTouchedFields,
+  } from "./models/loginForm";
+  import { loginFormValidator } from "./utilities/loginFormValidator";
+
+  let form = $state<{
+    values: LoginForm;
+    errors: LoginFormErrors;
+    touchedFields: LoginFormTouchedFields;
+  }>({
+    values: {
+      email: "",
+      password: "",
+    },
+    errors: {},
+    touchedFields: {
+      email: false,
+      password: false,
+    },
+  });
 </script>
 
 <div class="h-screen grid place-items-center">
@@ -8,31 +31,49 @@
     <h2 class="text-2xl font-bold text-center text-gray-300">Login</h2>
 
     <div>
-      <label for="username" class="block text-sm font-medium text-gray-300"
-        >Email</label
-      >
-      <Inputfield
-        type="text"
-        id="email"
-        name="email"
-        class="mt-1 block p-4 w-full rounded-xl border-gray-500 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-        required
-      />
+      <Label id="email" label="Email">
+        <Inputfield
+          type="text"
+          id="email"
+          name="email"
+          error={form.errors.email}
+          oninput={(e) => (form.values.email = e.currentTarget.value)}
+          onblur={() => {
+            form.touchedFields.email = true;
+            form.errors.email = loginFormValidator.validateEmail(
+              form.values.email
+            );
+          }}
+        />
+        {#if form.errors.email}
+          <div class="mb-1"></div>
+          <p class="text-red-500 text-sm">{form.errors.email}</p>
+        {/if}
+      </Label>
     </div>
 
     <div>
-      <label for="password" class="block text-sm font-medium text-gray-300"
-        >Password</label
-      >
-      <Inputfield
-        type="password"
-        id="password"
-        name="password"
-        class="mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-        required
-      />
+      <Label id="password" label="Password">
+        <Inputfield
+          type="password"
+          id="password"
+          name="password"
+          error={form.errors.password}
+          oninput={(e) => (form.values.password = e.currentTarget.value)}
+          onblur={() => {
+            form.touchedFields.password = true;
+            form.errors.password = loginFormValidator.validatePassword(
+              form.values.password
+            );
+          }}
+        />
+        {#if form.errors.password}
+          <div class="mb-1"></div>
+          <p class="text-red-500 text-sm">{form.errors.password}</p>
+        {/if}
+      </Label>
     </div>
 
-    <Button type="submit">Вход</Button>
+    <Button type="submit">Login</Button>
   </form>
 </div>
