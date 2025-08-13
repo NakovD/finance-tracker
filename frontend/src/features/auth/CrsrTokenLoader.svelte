@@ -8,4 +8,4 @@
   });
 </script>
 
-<div data-csrf-token-loader={$query.isSuccess}>{$query.status}</div>
+<div data-csrf-token-loader={$query.isSuccess}></div>
