@@ -1,6 +1,6 @@
 <script lang="ts">
   import clsx from "clsx";
-import type { Snippet } from "svelte";
+  import type { Snippet } from "svelte";
   import type { HTMLLabelAttributes } from "svelte/elements";
 
   type LabelProps = {
