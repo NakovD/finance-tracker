@@ -1,4 +1,7 @@
 <script lang="ts">
+  import type { EventHandler } from "svelte/elements";
+  import { createMutationFacade } from "../../../infrastructure/api/createMutation";
+  import { endpoints } from "../../../infrastructure/api/endpoints/endpoints";
   import Button from "../../common/button/Button.svelte";
   import Inputfield from "../../common/form/Inputfield.svelte";
   import Label from "../../common/form/Label.svelte";
@@ -8,6 +11,7 @@
     LoginFormTouchedFields,
   } from "./models/loginForm";
   import { loginFormValidator } from "./utilities/loginFormValidator";
+  import { toaster } from "../../common/toaster/toaster";
 
   let form = $state<{
     values: LoginForm;
@@ -24,10 +28,29 @@
       password: false,
     },
   });
+
+  const mutation = createMutationFacade<{ email: string; password: string }>({
+    endpoint: endpoints.auth.login,
+  });
+
+  const handleSubmit: EventHandler<SubmitEvent> = (e) => {
+    e.preventDefault();
+
+    $mutation.mutate(
+      { email: form.values.email, password: form.values.password },
+      {
+        onSuccess: () => toaster.showSuccess("Login successful!"),
+        onError: async (error) => toaster.showError(await error.response.json()),
+      }
+    );
+  };
 </script>
 
 <div class="h-screen grid place-items-center">
-  <form class="bg-zinc-500 p-6 rounded-2xl shadow-xl w-full max-w-sm space-y-4">
+  <form
+    class="bg-zinc-500 p-6 rounded-2xl shadow-xl w-full max-w-sm space-y-4"
+    onsubmit={handleSubmit}
+  >
     <h2 class="text-2xl font-bold text-center text-gray-300">Login</h2>
 
     <div>

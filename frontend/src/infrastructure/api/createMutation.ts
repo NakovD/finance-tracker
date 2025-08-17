@@ -10,7 +10,7 @@ type CreateMutationFacadeOptions<TRequest, TResponse> = Omit<
   "mutationFn"
 > & { endpoint: string };
 
-export const createMutationFacade = <TRequest, TResponse>({
+export const createMutationFacade = <TRequest, TResponse = void>({
   endpoint,
   ...rest
 }: CreateMutationFacadeOptions<TRequest, TResponse>) =>
