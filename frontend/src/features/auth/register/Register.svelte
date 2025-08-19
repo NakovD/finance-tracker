@@ -13,6 +13,7 @@
     RegisterFormTouchedFields,
   } from "./models/registerForm";
   import { registerFormValidator } from "./utilities/registerFormValidator";
+  import { Eye, EyeClosed } from "@lucide/svelte";
 
   let form = $state<{
     values: RegisterForm;
@@ -38,6 +39,11 @@
     },
   });
 
+  let visibility = $state({
+    password: false,
+    repeatPassword: false,
+  });
+
   const mutation = createMutationFacade<{ email: string; password: string }>({
     endpoint: endpoints.auth.register,
   });
@@ -57,7 +63,10 @@
 </script>
 
 <div class="h-screen grid place-items-center">
-  <form class="bg-zinc-500 p-6 rounded-2xl shadow-xl w-full max-w-sm space-y-4" onsubmit={handleSubmit}>
+  <form
+    class="bg-zinc-500 p-6 rounded-2xl shadow-xl w-full max-w-sm space-y-4"
+    onsubmit={handleSubmit}
+  >
     <h2 class="text-2xl font-bold text-center text-gray-300">Login</h2>
 
     <Label id="first-name" class="relative" label="First Name">
@@ -126,20 +135,33 @@
       {/if}
     </Label>
     <div class="mb-6"></div>
+
     <Label id="password" class="relative" label="Password">
-      <Inputfield
-        type="password"
-        id="password"
-        name="password"
-        error={form.errors.password}
-        oninput={(e) => (form.values.password = e.currentTarget.value)}
-        onblur={() => {
-          form.touchedFields.password = true;
-          form.errors.password = registerFormValidator.validatePassword(
-            form.values.password
-          );
-        }}
-      />
+      <div class="relative">
+        <Inputfield
+          type={visibility.password ? "text" : "password"}
+          id="password"
+          name="password"
+          error={form.errors.password}
+          oninput={(e) => (form.values.password = e.currentTarget.value)}
+          onblur={() => {
+            form.touchedFields.password = true;
+            form.errors.password = registerFormValidator.validatePassword(
+              form.values.password
+            );
+          }}
+        />
+        <button
+          type="button"
+          class="cursor-pointer absolute right-3 top-3 text-gray-400"
+          onclick={() => (visibility.password = !visibility.password)}
+          >{#if visibility.password}
+            <EyeClosed />
+          {:else}
+            <Eye />
+          {/if}</button
+        >
+      </div>
       {#if form.errors.password}
         <div class="mb-1"></div>
         <p class="text-red-500 text-sm absolute left-0 -bottom-5">
