@@ -171,21 +171,33 @@
     </Label>
     <div class="mb-6"></div>
     <Label id="repeat-password" class="relative" label="Repeat Password">
-      <Inputfield
-        type="password"
-        id="repeat-password"
-        name="repeat-password"
-        error={form.errors.repeatPassword}
-        oninput={(e) => (form.values.repeatPassword = e.currentTarget.value)}
-        onblur={() => {
-          form.touchedFields.password = true;
-          form.errors.repeatPassword =
-            registerFormValidator.validateRepeatPassword(
-              form.values.password,
-              form.values.repeatPassword
-            );
-        }}
-      />
+      <div class="relative">
+        <Inputfield
+          type={visibility.repeatPassword ? "text" : "password"}
+          id="repeat-password"
+          name="repeat-password"
+          error={form.errors.repeatPassword}
+          oninput={(e) => (form.values.repeatPassword = e.currentTarget.value)}
+          onblur={() => {
+            form.touchedFields.password = true;
+            form.errors.repeatPassword =
+              registerFormValidator.validateRepeatPassword(
+                form.values.password,
+                form.values.repeatPassword
+              );
+          }}
+        />
+        <button
+          type="button"
+          class="cursor-pointer absolute right-3 top-3 text-gray-400"
+          onclick={() => (visibility.password = !visibility.password)}
+          >{#if visibility.password}
+            <EyeClosed />
+          {:else}
+            <Eye />
+          {/if}</button
+        >
+      </div>
       {#if form.errors.repeatPassword}
         <div class="mb-1"></div>
         <p class="text-red-500 text-sm absolute left-0 -bottom-5">
