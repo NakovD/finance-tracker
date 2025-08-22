@@ -12,6 +12,7 @@
   } from "./models/loginForm";
   import { loginFormValidator } from "./utilities/loginFormValidator";
   import { toaster } from "../../common/toaster/toaster";
+  import { Eye, EyeClosed } from "@lucide/svelte";
 
   let form = $state<{
     values: LoginForm;
@@ -29,6 +30,8 @@
     },
   });
 
+  let isPasswordVisible = $state(false);
+
   const mutation = createMutationFacade<{ email: string; password: string }>({
     endpoint: endpoints.auth.login,
   });
@@ -40,7 +43,8 @@
       { email: form.values.email, password: form.values.password },
       {
         onSuccess: () => toaster.showSuccess("Login successful!"),
-        onError: async (error) => toaster.showError(await error.response.json()),
+        onError: async (error) =>
+          toaster.showError(await error.response.json()),
       }
     );
   };
@@ -77,19 +81,32 @@
 
     <div>
       <Label id="password" label="Password">
-        <Inputfield
-          type="password"
-          id="password"
-          name="password"
-          error={form.errors.password}
-          oninput={(e) => (form.values.password = e.currentTarget.value)}
-          onblur={() => {
-            form.touchedFields.password = true;
-            form.errors.password = loginFormValidator.validatePassword(
-              form.values.password
-            );
-          }}
-        />
+        <div class="relative">
+          <Inputfield
+            type="password"
+            id="password"
+            name="password"
+            error={form.errors.password}
+            oninput={(e) => (form.values.password = e.currentTarget.value)}
+            onblur={() => {
+              form.touchedFields.password = true;
+              form.errors.password = loginFormValidator.validatePassword(
+                form.values.password
+              );
+            }}
+          />
+          <button
+            type="button"
+            class="cursor-pointer absolute right-3 top-3 text-gray-400"
+            onclick={() => (isPasswordVisible = !isPasswordVisible)}
+          >
+            {#if isPasswordVisible}
+              <EyeClosed />
+            {:else}
+              <Eye />
+            {/if}</button
+          >
+        </div>
         {#if form.errors.password}
           <div class="mb-1"></div>
           <p class="text-red-500 text-sm">{form.errors.password}</p>
