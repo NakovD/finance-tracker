@@ -1,9 +1,0 @@
-services:
-  svelte:
-    build: .
-    container_name: svelte_app
-    volumes:
-      - .:/app
-      - /app/node_modules 
-    ports:
-      - "5555:5173"
