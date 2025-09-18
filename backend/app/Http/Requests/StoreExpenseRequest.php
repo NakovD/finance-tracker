@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Expense;
+use App\Models\MontlyFinance;
 use ExpenseCategory;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -9,11 +11,25 @@ use Illuminate\Validation\Rule;
 class StoreExpenseRequest extends FormRequest
 {
     /**
+     * Indicates if the validator should stop on the first rule failure.
+     *
+     * @var bool
+     */
+    protected $stopOnFirstFailure = true;
+    /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return false;
+        $financeId = $this->input('finance_id');
+
+        $finance = MontlyFinance::find($financeId);
+
+        if (!$finance) {
+            return false;
+        }
+
+        return $this->user()->can('create', [Expense::class, $finance]);
     }
 
     /**
