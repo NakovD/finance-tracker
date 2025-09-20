@@ -21,7 +21,7 @@ class StoreExpenseRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        $financeId = $this->input('finance_id');
+        $financeId = $this->input('montly_finance_id');
 
         $finance = MontlyFinance::find($financeId);
 
@@ -40,6 +40,7 @@ class StoreExpenseRequest extends FormRequest
     public function rules(): array
     {
         return [
+            "montly_finance_id" => "required|exists:montly_finances,id",
             "name" => "required|string|min:4|max:255",
             "amount" => "required|number|min:1",
             "date" => ["required", Rule::date()->afterOrEqual(today())],
