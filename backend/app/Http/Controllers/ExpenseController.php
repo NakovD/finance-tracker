@@ -28,9 +28,7 @@ class ExpenseController extends Controller
     {
         $validated = $request->validated();
 
-        $financeId = $request->input('finance_id');
-
-        $result = $this->expenseService->Create($financeId, $validated);
+        $result = $this->expenseService->Create($validated);
 
         return response($result->message, $result->status_code);  
     }
