@@ -5,7 +5,6 @@ namespace App\Policies;
 use App\Models\Expense;
 use App\Models\MontlyFinance;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class ExpensePolicy
 {
@@ -14,7 +13,7 @@ class ExpensePolicy
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +21,7 @@ class ExpensePolicy
      */
     public function view(User $user, Expense $expense): bool
     {
-        return false;
+        return $expense->montlyFinance->user_id === $user->id;
     }
 
     /**
