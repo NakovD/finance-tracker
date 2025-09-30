@@ -11,6 +11,24 @@ class MontlyFinanceService
     {
         $created = MontlyFinance::create($data);
 
-        return new DataResult($created, "Expense created", true, 201);
+        return new DataResult($created, "Finance created", true, 201);
     }
+
+    public function Update(array $data): DataResult
+    {
+        $finance = MontlyFinance::where("id", $data["id"])
+            ->first();
+
+        if (!$finance) {
+            return new DataResult(null,"Finance not found", false, 404);
+        }
+
+        $finance->update($data);
+
+        $finance->refresh();
+
+        return new DataResult($finance, "Finance updated", true, 200);
+    }
+ 
+   
 }
