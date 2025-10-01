@@ -3,6 +3,7 @@
 namespace App\Services;
 use App\Models\MontlyFinance;
 use App\Results\DataResult;
+use App\Results\MessageResult;
 
 
 class MontlyFinanceService
@@ -29,6 +30,19 @@ class MontlyFinanceService
 
         return new DataResult($finance, "Finance updated", true, 200);
     }
- 
+    public function Delete(int $financeId): MessageResult
+    {
+        $finance = MontlyFinance::where("id", $financeId)
+            ->first();
+
+        if (!$finance) {
+            return new MessageResult("Finance not found", false, 404);
+        }
+
+        $finance->delete();
+
+        return new MessageResult("Finance deleted", true, 204);
+
+    }
    
 }
