@@ -8,6 +8,12 @@ use App\Results\MessageResult;
 
 class MontlyFinanceService
 {
+    public function GetAll(string $userId): DataResult
+    {
+        $finances = MontlyFinance::where('user_id', $userId)->get();
+
+        return new DataResult($finances, "Finances retrieved", true, 200);
+    }
     public function Create(array $data): DataResult
     {
         $created = MontlyFinance::create($data);
