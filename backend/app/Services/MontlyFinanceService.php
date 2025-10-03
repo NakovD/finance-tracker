@@ -8,7 +8,7 @@ use App\Results\MessageResult;
 
 class MontlyFinanceService
 {
-    public function GetAll(string $userId): DataResult
+    public function GetAllByUserId(string $userId): DataResult
     {
         $finances = MontlyFinance::where('user_id', $userId)->get();
 

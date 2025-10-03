@@ -2,16 +2,17 @@
 
 namespace App\Services;
 use App\Models\Expense;
+use App\Results\DataResult;
 use App\Results\MessageResult;
 
 
 class ExpenseService
 {
-    public function Create(array $data): MessageResult
+    public function Create(array $data): DataResult
     {
-        Expense::create($data);
+        $created = Expense::create($data);
 
-        return new MessageResult("Expense created", true, 201);
+        return new DataResult($created, "Expense created", true, 201);
     }
 
     public function Update(array $data): MessageResult
