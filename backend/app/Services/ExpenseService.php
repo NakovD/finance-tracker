@@ -15,18 +15,20 @@ class ExpenseService
         return new DataResult($created, "Expense created", true, 201);
     }
 
-    public function Update(array $data): MessageResult
+    public function Update(array $data): DataResult
     {
         $expense = Expense::where("id", $data["id"])
             ->first();
 
         if (!$expense) {
-            return new MessageResult("Expense not found", false, 404);
+            return new DataResult(null, "Expense not found", false, 404);
         }
 
         $expense->update($data);
 
-        return new MessageResult("Expense updated", true, 200);
+        $expense->refresh();
+
+        return new DataResult($expense, "Expense updated", true, 200);
     }
 
     public function Delete(int $expenseId): MessageResult
