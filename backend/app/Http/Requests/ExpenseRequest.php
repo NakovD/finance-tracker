@@ -8,7 +8,7 @@ use ExpenseCategory;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class StoreExpenseRequest extends FormRequest
+class ExpenseRequest extends FormRequest
 {
     /**
      * Indicates if the validator should stop on the first rule failure.
