@@ -4,10 +4,24 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Models\MontlyFinance;
+use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
+
 
 
 class MontlyExpenseRequest extends FormRequest
 {
+    public function prepareForValidation(): void
+    {
+        // Check if "month" was submitted
+        if ($this->has('name')) {
+            // Convert "JANUARY" or "january" → "January"
+            $this->merge([
+                'name' => Str::ucfirst(Str::lower($this->name)),
+            ]);
+        }
+    }
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -28,7 +42,16 @@ class MontlyExpenseRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            "user_id" => "required|exists:users,id",
+            'month' => [
+                'required',
+                'string',
+                Rule::in([
+                    'January', 'February', 'March', 'April', 'May', 'June',
+                    'July', 'August', 'September', 'October', 'November', 'December',
+                ]),
+            ],
+            "income" => "required|number|min:1|max:25000",
         ];
     }
 }
