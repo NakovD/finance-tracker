@@ -9,13 +9,11 @@ use Illuminate\Validation\Rule;
 
 
 
-class MontlyExpenseRequest extends FormRequest
+class MontlyFinanceRequest extends FormRequest
 {
     public function prepareForValidation(): void
     {
-        // Check if "month" was submitted
         if ($this->has('name')) {
-            // Convert "JANUARY" or "january" → "January"
             $this->merge([
                 'name' => Str::ucfirst(Str::lower($this->name)),
             ]);

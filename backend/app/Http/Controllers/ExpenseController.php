@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Expense;
 use App\Services\ExpenseService;
 use Illuminate\Http\Request;
-use App\Http\Requests\StoreExpenseRequest;
+use App\Http\Requests\ExpenseRequest;
 
 
 class ExpenseController extends Controller
@@ -24,7 +24,7 @@ class ExpenseController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreExpenseRequest $request)
+    public function store(ExpenseRequest $request)
     {
         $validated = $request->validated();
 
