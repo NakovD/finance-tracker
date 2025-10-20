@@ -44,9 +44,13 @@ class ExpenseController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Expense $expense)
+    public function update(ExpenseRequest $request)
     {
-        //
+        $validated = $request->validated();
+
+        $result = $this->expenseService->update($validated);
+
+        return response($result->message, $result->status_code);  
     }
 
     /**
