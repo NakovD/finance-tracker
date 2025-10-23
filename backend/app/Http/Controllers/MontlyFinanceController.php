@@ -44,9 +44,13 @@ class MontlyFinanceController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, MontlyFinance $montlyFinance)
+    public function update(MontlyFinanceRequest $request)
     {
-        //
+        $validated = $request->validated();
+
+        $result = $this->montlyFinanceService->Update($validated);
+
+        return response($result->data, $result->status_code);  
     }
 
     /**
