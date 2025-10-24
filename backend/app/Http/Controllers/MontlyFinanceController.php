@@ -36,9 +36,11 @@ class MontlyFinanceController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(MontlyFinance $montlyFinance)
+    public function show(string $id)
     {
-        //
+        $result = $this->montlyFinanceService->Delete($id);
+
+        return response($result->message, $result->status_code);
     }
 
     /**
