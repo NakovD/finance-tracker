@@ -58,8 +58,10 @@ class MontlyFinanceController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(MontlyFinance $montlyFinance)
+    public function destroy(string $id)
     {
-        //
+        $result = $this->montlyFinanceService->Delete($id);
+
+        return response($result->message, $result->status_code);
     }
 }
