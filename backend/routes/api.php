@@ -9,5 +9,5 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::apiResource('articles', ExpenseController::class);
+    Route::apiResource('expenses', ExpenseController::class);
 });
