@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\MontlyFinanceRequest;
-use App\Models\MontlyFinance;
 use App\Services\MontlyFinanceService;
-use Illuminate\Http\Request;
 
 class MontlyFinanceController extends Controller
 {
