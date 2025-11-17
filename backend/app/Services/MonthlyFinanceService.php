@@ -1,29 +1,29 @@
 <?php
 
 namespace App\Services;
-use App\Models\MontlyFinance;
+use App\Models\MonthlyFinance;
 use App\Results\DataResult;
 use App\Results\MessageResult;
 
 
-class MontlyFinanceService
+class MonthlyFinanceService
 {
     public function GetAllByUserId(string $userId): DataResult
     {
-        $finances = MontlyFinance::where('user_id', $userId)->get();
+        $finances = MonthlyFinance::where('user_id', $userId)->get();
 
         return new DataResult($finances, "Finances retrieved", true, 200);
     }
     public function Create(array $data): DataResult
     {
-        $created = MontlyFinance::create($data);
+        $created = MonthlyFinance::create($data);
 
         return new DataResult($created, "Finance created", true, 201);
     }
 
     public function Update(array $data): DataResult
     {
-        $finance = MontlyFinance::where("id", $data["id"])
+        $finance = MonthlyFinance::where("id", $data["id"])
             ->first();
 
         if (!$finance) {
@@ -38,7 +38,7 @@ class MontlyFinanceService
     }
     public function Delete(int $financeId): MessageResult
     {
-        $finance = MontlyFinance::where("id", $financeId)
+        $finance = MonthlyFinance::where("id", $financeId)
             ->first();
 
         if (!$finance) {

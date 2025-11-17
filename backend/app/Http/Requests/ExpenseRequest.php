@@ -3,7 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Models\Expense;
-use App\Models\MontlyFinance;
+use App\Models\MonthlyFinance;
 use ExpenseCategory;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -21,9 +21,9 @@ class ExpenseRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        $financeId = $this->input('montly_finance_id');
+        $financeId = $this->input('monthly_finance_id');
 
-        $finance = MontlyFinance::find($financeId);
+        $finance = MonthlyFinance::find($financeId);
 
         if (!$finance) {
             return false;
@@ -40,7 +40,7 @@ class ExpenseRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "montly_finance_id" => "required|exists:montly_finances,id",
+            "monthly_finance_id" => "required|exists:monthly_finances,id",
             "name" => "required|string|min:4|max:255",
             "amount" => "required|number|min:1",
             "date" => ["required", Rule::date()->afterOrEqual(today())],

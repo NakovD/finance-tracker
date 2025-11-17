@@ -3,13 +3,13 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Models\MontlyFinance;
+use App\Models\MonthlyFinance;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 
 
-class MontlyFinanceRequest extends FormRequest
+class MonthlyFinanceRequest extends FormRequest
 {
     public function prepareForValidation(): void
     {
@@ -29,7 +29,7 @@ class MontlyFinanceRequest extends FormRequest
 
         return $finance
             ? $this->user()->can('update', $finance)
-            : $this->user()->can('create', MontlyFinance::class);
+            : $this->user()->can('create', MonthlyFinance::class);
     }
 
     /**

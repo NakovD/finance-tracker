@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\MontlyFinanceRequest;
-use App\Services\MontlyFinanceService;
+use App\Http\Requests\MonthlyFinanceRequest;
+use App\Services\MonthlyFinanceService;
 
-class MontlyFinanceController extends Controller
+class MonthlyFinanceController extends Controller
 {
 
-    public function __construct(private MontlyFinanceService $montlyFinanceService) {
+    public function __construct(private MonthlyFinanceService $monthlyFinanceService) {
     }
 
     /**
@@ -22,11 +22,11 @@ class MontlyFinanceController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(MontlyFinanceRequest $request)
+    public function store(MonthlyFinanceRequest $request)
     {
         $validated = $request->validated();
 
-        $result = $this->montlyFinanceService->Create($validated);
+        $result = $this->monthlyFinanceService->Create($validated);
 
         return response($result->data, $result->status_code);  
     }
@@ -36,7 +36,7 @@ class MontlyFinanceController extends Controller
      */
     public function show(string $id)
     {
-        $result = $this->montlyFinanceService->Delete($id);
+        $result = $this->monthlyFinanceService->Delete($id);
 
         return response($result->message, $result->status_code);
     }
@@ -44,11 +44,11 @@ class MontlyFinanceController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(MontlyFinanceRequest $request)
+    public function update(MonthlyFinanceRequest $request)
     {
         $validated = $request->validated();
 
-        $result = $this->montlyFinanceService->Update($validated);
+        $result = $this->monthlyFinanceService->Update($validated);
 
         return response($result->data, $result->status_code);  
     }
@@ -58,7 +58,7 @@ class MontlyFinanceController extends Controller
      */
     public function destroy(string $id)
     {
-        $result = $this->montlyFinanceService->Delete($id);
+        $result = $this->monthlyFinanceService->Delete($id);
 
         return response($result->message, $result->status_code);
     }

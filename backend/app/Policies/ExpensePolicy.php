@@ -3,7 +3,7 @@
 namespace App\Policies;
 
 use App\Models\Expense;
-use App\Models\MontlyFinance;
+use App\Models\MonthlyFinance;
 use App\Models\User;
 
 class ExpensePolicy
@@ -21,15 +21,15 @@ class ExpensePolicy
      */
     public function view(User $user, Expense $expense): bool
     {
-        return $expense->montlyFinance->user_id === $user->id;
+        return $expense->monthlyFinance->user_id === $user->id;
     }
 
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user, MontlyFinance $montly_finance): bool
+    public function create(User $user, MonthlyFinance $monthly_finance): bool
     {
-        return $montly_finance->user_id === $user->id;
+        return $monthly_finance->user_id === $user->id;
     }
 
     /**
@@ -37,7 +37,7 @@ class ExpensePolicy
      */
     public function update(User $user, Expense $expense): bool
     {
-        return $expense->montlyFinance->user_id === $user->id;
+        return $expense->monthlyFinance->user_id === $user->id;
     }
 
     /**
@@ -45,7 +45,7 @@ class ExpensePolicy
      */
     public function delete(User $user, Expense $expense): bool
     {
-        return $expense->montlyFinance->user_id === $user->id;
+        return $expense->monthlyFinance->user_id === $user->id;
     }
 
     /**

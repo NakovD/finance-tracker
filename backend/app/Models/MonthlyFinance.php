@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 
-class MontlyFinance extends Model
+class MonthlyFinance extends Model
 {
     use SoftDeletes;
     //

@@ -2,10 +2,10 @@
 
 namespace App\Policies;
 
-use App\Models\MontlyFinance;
+use App\Models\MonthlyFinance;
 use App\Models\User;
 
-class MontlyFinancePolicy
+class MonthlyFinancePolicy
 {
     /**
      * Determine whether the user can view any models.
@@ -18,9 +18,9 @@ class MontlyFinancePolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, MontlyFinance $montlyFinance): bool
+    public function view(User $user, MonthlyFinance $monthlyFinance): bool
     {
-        return $user->id === $montlyFinance->user_id;
+        return $user->id === $monthlyFinance->user_id;
     }
 
     /**
@@ -34,31 +34,31 @@ class MontlyFinancePolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, MontlyFinance $montlyFinance): bool
+    public function update(User $user, MonthlyFinance $monthlyFinance): bool
     {
-        return $user->id === $montlyFinance->user_id;
+        return $user->id === $monthlyFinance->user_id;
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, MontlyFinance $montlyFinance): bool
+    public function delete(User $user, MonthlyFinance $monthlyFinance): bool
     {
-        return $user->id === $montlyFinance->user_id;
+        return $user->id === $monthlyFinance->user_id;
     }
 
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, MontlyFinance $montlyFinance): bool
+    public function restore(User $user, MonthlyFinance $monthlyFinance): bool
     {
-        return $user->id === $montlyFinance->user_id;
+        return $user->id === $monthlyFinance->user_id;
     }
 
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, MontlyFinance $montlyFinance): bool
+    public function forceDelete(User $user, MonthlyFinance $monthlyFinance): bool
     {
         return false;
     }

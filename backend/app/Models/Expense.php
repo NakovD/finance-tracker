@@ -20,8 +20,8 @@ class Expense extends Model
      */
     protected $fillable = ['name', 'description', 'amount', 'date', 'category'];
 
-    public function MontlyFinance(): BelongsTo
+    public function MonthlyFinance(): BelongsTo
     {
-        return $this->belongsTo(MontlyFinance::class);
+        return $this->belongsTo(MonthlyFinance::class);
     }
 }

@@ -3,7 +3,7 @@
 use App\Http\Controllers\ExpenseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\MontlyFinanceController;
+use App\Http\Controllers\MonthlyFinanceController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -14,6 +14,6 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::apiResource('montlyFinances', MontlyFinanceController::class);
+    Route::apiResource('monthlyFinances', MonthlyFinanceController::class);
 });
 
