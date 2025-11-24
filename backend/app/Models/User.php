@@ -51,6 +51,6 @@ class User extends Authenticatable
 
     public function expenses(): HasMany
     {
-        return $this->hasMany(MontlyFinance::class);
+        return $this->hasMany(MonthlyFinance::class);
     }
 }

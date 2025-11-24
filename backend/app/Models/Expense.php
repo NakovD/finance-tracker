@@ -3,10 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 
 class Expense extends Model
 {
+    use SoftDeletes;
+
     //
 
     /**
@@ -16,8 +20,8 @@ class Expense extends Model
      */
     protected $fillable = ['name', 'description', 'amount', 'date', 'category'];
 
-    public function MontlyFinance(): HasOne
+    public function MonthlyFinance(): BelongsTo
     {
-        return $this->hasOne(MontlyFinance::class);
+        return $this->belongsTo(MonthlyFinance::class);
     }
 }
