@@ -9,12 +9,12 @@
   let {
     categoryName,
     expenses,
-    montlyFinance,
+    monthlyFinance,
     initialSearchQuery = "",
   }: {
     categoryName: string;
     expenses: Expense[];
-    montlyFinance: MonthlyFinance;
+    monthlyFinance: MonthlyFinance;
     initialSearchQuery?: string;
   } = $props();
 
@@ -53,7 +53,7 @@
     <div class="mb-4"></div>
     <ul class="list-none grid grid-cols-2 gap-2">
       {#each filteredExpenses as expense (expense.id)}
-        <ExpenseListItem {expense} month={montlyFinance} />
+        <ExpenseListItem {expense} month={monthlyFinance} />
       {/each}
     </ul>
     <div class="mb-4"></div>

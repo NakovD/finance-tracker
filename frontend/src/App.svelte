@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Router, Route } from "svelte-routing";
   import { QueryClient, QueryClientProvider } from "@tanstack/svelte-query";
-  import MontlyFinance from "./features/finance/monthlyFinance/MonthlyFinance.svelte";
+  import MonthlyFinance from "./features/finance/monthlyFinance/MonthlyFinance.svelte";
   import YearlyFinance from "./features/finance/yearlyFinance/YearlyFinance.svelte";
   import AllYears from "./features/finance/overview/AllYears.svelte";
   import { Toaster } from "svelte-sonner";
@@ -24,8 +24,8 @@
   <main>
     <CrsrTokenLoader />
     <Router>
-      <Route path="/montly-finance/:id" let:params>
-        <MontlyFinance id={params.id} />
+      <Route path="/monthly-finance/:id" let:params>
+        <MonthlyFinance id={params.id} />
       </Route>
       <Route path="/yearly-finance/:id" let:params>
         <YearlyFinance id={params.id} /></Route

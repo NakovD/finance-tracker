@@ -99,7 +99,7 @@
       },
       {
         onSuccess: () => {
-          qc.invalidateQueries({ queryKey: ["montly-finance", month.id] });
+          qc.invalidateQueries({ queryKey: ["monthly-finance", month.id] });
           resetForm();
           onSuccess?.();
         },

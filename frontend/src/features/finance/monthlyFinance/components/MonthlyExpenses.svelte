@@ -49,7 +49,7 @@
         <ExpenseCategory
           categoryName={category}
           expenses={groupedByCategories[category]}
-          montlyFinance={monthFinance}
+          monthlyFinance={monthFinance}
           initialSearchQuery={search}
         />
       {/if}

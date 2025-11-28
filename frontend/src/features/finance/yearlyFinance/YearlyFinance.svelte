@@ -58,12 +58,12 @@
       <p class="text-red-500">Failed to load data.</p>
     {:else if $query.isSuccess}
       {#if $query.data.length > 0}
-        {#each $query.data as montlyExpense}
+        {#each $query.data as monthlyExpense}
           <Link
-            to={`/montly-finance/${montlyExpense.id}`}
+            to={`/monthly-finance/${monthlyExpense.id}`}
             class="shadow-md rounded-lg p-4 bg-amber-950 text-white hover:bg-amber-800 transition duration-300 ease-in-out"
           >
-            <p class="text-xl font-semibold">{montlyExpense.name}</p>
+            <p class="text-xl font-semibold">{monthlyExpense.name}</p>
           </Link>
         {/each}
       {:else}

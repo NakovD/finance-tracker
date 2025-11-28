@@ -13,7 +13,7 @@
   import { handleDbAction } from "../../../../infrastructure/db/utilities/handleDbAction";
   import type { MonthlyFinance } from "../../monthlyFinance/models/monthlyFinance";
   import { toaster } from "../../../common/toaster/toaster";
-  import { monthlyFinanceFormValidator } from "../utilities/montlyFinanceFormValidator";
+  import { monthlyFinanceFormValidator } from "../utilities/monthlyFinanceFormValidator";
 
   let { year, onSuccess }: { year: number; onSuccess?: VoidFunction } =
     $props();
