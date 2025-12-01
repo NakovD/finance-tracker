@@ -6,7 +6,7 @@
   import AllYears from "./features/finance/overview/AllYears.svelte";
   import { Toaster } from "svelte-sonner";
   import Login from "./features/auth/login/Login.svelte";
-  import CrsrTokenLoader from "./features/auth/CrsrTokenLoader.svelte";
+  import CrsrTokenLoader from "./features/auth/CsrfTokenLoader.svelte";
   import Register from "./features/auth/register/Register.svelte";
 
   const queryClient = new QueryClient({
