@@ -36,9 +36,9 @@ class MonthlyFinanceController extends Controller
      */
     public function show(string $id)
     {
-        $result = $this->monthlyFinanceService->Delete($id);
+        $result = $this->monthlyFinanceService->GetAllByUserId($id);
 
-        return response($result->message, $result->status_code);
+        return response($result->data, $result->status_code);
     }
 
     /**
