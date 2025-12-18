@@ -39,4 +39,11 @@ export const METHODS = {
       };
     }
   },
+  POST: async <TRequest, TResponse>(endpoint: string, body: TRequest) => {
+    const response = httpInstance
+      .post<TResponse>(endpoint, { json: body })
+      .json();
+
+    return response;
+  },
 } as const;
