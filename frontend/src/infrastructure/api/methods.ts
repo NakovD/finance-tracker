@@ -2,6 +2,7 @@ import { HTTPError } from "ky";
 import { httpInstance } from "./httpInstance";
 import type { AppError } from "./models/AppError";
 import type { ZodObject } from "zod";
+import { getCsrfToken } from "./utilities/csrfTokenUtility";
 
 export const METHODS = {
   GET: async <T extends Record<string, any>>(
@@ -41,7 +42,12 @@ export const METHODS = {
   },
   POST: async <TRequest, TResponse>(endpoint: string, body: TRequest) => {
     const response = httpInstance
-      .post<TResponse>(endpoint, { json: body })
+      .post<TResponse>(endpoint, {
+        headers: new Headers({
+          "X-XSRF-TOKEN": getCsrfToken() ?? "",
+        }),
+        json: body,
+      })
       .json();
 
     return response;
