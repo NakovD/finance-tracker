@@ -44,7 +44,12 @@
     repeatPassword: false,
   });
 
-  const mutation = createMutationFacade<{ email: string; password: string }>({
+  const mutation = createMutationFacade<{
+    name: string;
+    email: string;
+    password: string;
+    password_confirmation: string;
+  }>({
     endpoint: endpoints.auth.register,
   });
 
@@ -52,7 +57,12 @@
     e.preventDefault();
 
     $mutation.mutate(
-      { email: form.values.email, password: form.values.password },
+      {
+        email: form.values.email,
+        name: `${form.values.firstName} ${form.values.lastName}`,
+        password: form.values.password,
+        password_confirmation: form.values.password,
+      },
       {
         onSuccess: () => toaster.showSuccess("Login successful!"),
         onError: async (error) =>
@@ -190,7 +200,8 @@
         <button
           type="button"
           class="cursor-pointer absolute right-3 top-3 text-gray-400"
-          onclick={() => (visibility.repeatPassword = !visibility.repeatPassword)}
+          onclick={() =>
+            (visibility.repeatPassword = !visibility.repeatPassword)}
           >{#if visibility.repeatPassword}
             <EyeClosed />
           {:else}
