@@ -14,6 +14,8 @@
   } from "./models/registerForm";
   import { registerFormValidator } from "./utilities/registerFormValidator";
   import { Eye, EyeClosed } from "@lucide/svelte";
+  import { navigate } from "svelte-routing";
+  import { routePaths } from "../../../infrastructure/routing/routePaths";
 
   let form = $state<{
     values: RegisterForm;
@@ -64,7 +66,10 @@
         password_confirmation: form.values.password,
       },
       {
-        onSuccess: () => toaster.showSuccess("Login successful!"),
+        onSuccess: () => {
+          toaster.showSuccess("Login successful!");
+          navigate(routePaths.home);
+        },
         onError: async (error) =>
           toaster.showError(await error.response.json()),
       }

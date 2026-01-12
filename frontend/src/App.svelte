@@ -8,6 +8,7 @@
   import Login from "./features/auth/login/Login.svelte";
   import CrsrTokenLoader from "./features/auth/CsrfTokenLoader.svelte";
   import Register from "./features/auth/register/Register.svelte";
+  import { routePaths } from "./infrastructure/routing/routePaths";
 
   const queryClient = new QueryClient({
     defaultOptions: {
@@ -30,7 +31,7 @@
       <Route path="/yearly-finance/:id" let:params>
         <YearlyFinance id={params.id} /></Route
       >
-      <Route path="/"><AllYears /></Route>
+      <Route path={routePaths.home}><AllYears /></Route>
       <Route path="/login"><Login /></Route>
       <Route path="/register"><Register /></Route>
     </Router>
