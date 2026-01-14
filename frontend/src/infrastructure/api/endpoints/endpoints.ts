@@ -5,7 +5,7 @@ export const endpoints = {
   },
   monthlyFinances: {
     getMonthlyFinances: "monthly-finances",
-    createMonthlyFinance: "monthly-finances",
+    createMonthlyFinance: "monthlyFinances",
     getMonthlyFinance: (id: string) => `monthly-finances/${id}`,
     updateMonthlyFinance: (id: string) => `monthly-finances/${id}`,
     deleteMonthlyFinance: (id: string) => `monthly-finances/${id}`,
