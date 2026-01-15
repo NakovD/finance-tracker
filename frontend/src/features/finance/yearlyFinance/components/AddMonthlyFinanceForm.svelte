@@ -14,6 +14,8 @@
   import type { MonthlyFinance } from "../../monthlyFinance/models/monthlyFinance";
   import { toaster } from "../../../common/toaster/toaster";
   import { monthlyFinanceFormValidator } from "../utilities/monthlyFinanceFormValidator";
+  import { endpoints } from "../../../../infrastructure/api/endpoints/endpoints";
+  import { createMutationFacade } from "../../../../infrastructure/api/createMutation";
 
   let { year, onSuccess }: { year: number; onSuccess?: VoidFunction } =
     $props();
@@ -36,29 +38,18 @@
 
   const qc = useQueryClient();
 
-  const mutation = createMutation<MonthlyFinance, Error, MonthlyFinance>({
-    mutationFn: (monthlyFinance) =>
-      handleDbAction(() => expenseTrackerDB.addSingle(monthlyFinance)),
-    onSuccess: () => {
-      toaster.showSuccess("Monthly finance added successfully.");
-      qc.invalidateQueries({
-        queryKey: ["all-finances", year],
-      });
-    },
-    onError: () => {
-      toaster.showError("Failed to add monthly finance.");
-    },
+  const mutation = createMutationFacade<{ month: string; income: number }>({
+    endpoint: endpoints.monthlyFinances.createMonthlyFinance,
+    onSuccess: () => toaster.showSuccess("Monthly finance added successfully."),
+    onError: () => toaster.showError("Failed to add monthly finance."),
   });
 
   const handleSubmit = (e: SubmitEvent) => {
     e.preventDefault();
     $mutation.mutate(
       {
-        id: crypto.randomUUID(),
-        name: form.values.monthName,
+        month: form.values.monthName,
         income: form.values.income,
-        expenses: [],
-        year,
       },
       { onSuccess: () => onSuccess?.() }
     );
