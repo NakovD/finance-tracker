@@ -9,9 +9,6 @@
     MonthlyFinanceFormTouchedFields,
   } from "../models/monthlyFinanceForm";
   import Button from "../../../common/button/Button.svelte";
-  import { expenseTrackerDB } from "../../../../infrastructure/db";
-  import { handleDbAction } from "../../../../infrastructure/db/utilities/handleDbAction";
-  import type { MonthlyFinance } from "../../monthlyFinance/models/monthlyFinance";
   import { toaster } from "../../../common/toaster/toaster";
   import { monthlyFinanceFormValidator } from "../utilities/monthlyFinanceFormValidator";
   import { endpoints } from "../../../../infrastructure/api/endpoints/endpoints";
