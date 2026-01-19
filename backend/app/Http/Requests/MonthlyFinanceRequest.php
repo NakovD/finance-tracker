@@ -49,7 +49,7 @@ class MonthlyFinanceRequest extends FormRequest
                     'July', 'August', 'September', 'October', 'November', 'December',
                 ]),
             ],
-            "income" => "required|number|min:1|max:25000",
+            "income" => "required|numeric|min:1|max:25000",
         ];
     }
 }
