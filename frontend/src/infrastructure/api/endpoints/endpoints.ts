@@ -2,6 +2,7 @@ export const endpoints = {
   auth: {
     register: "register",
     login: "login",
+    user: "user",
   },
   monthlyFinances: {
     getMonthlyFinances: "monthlyFinances",
