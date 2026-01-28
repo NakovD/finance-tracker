@@ -1,13 +1,13 @@
 import { HTTPError } from "ky";
 import { httpInstance } from "./httpInstance";
 import type { AppError } from "./models/AppError";
-import type { ZodObject } from "zod";
+import type { ZodType } from "zod";
 import { getCsrfToken } from "./utilities/csrfTokenUtility";
 
 export const METHODS = {
   GET: async <T extends Record<string, any>>(
     endpoint: string,
-    validator: ZodObject<T>
+    validator: ZodType<T>
   ) => {
     try {
       const result = await httpInstance.get(endpoint).json<T>();
