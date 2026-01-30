@@ -15,6 +15,8 @@
   import { Eye, EyeClosed } from "@lucide/svelte";
   import { routePaths } from "../../../infrastructure/routing/routePaths";
   import { navigate } from "svelte-routing";
+  import { useQueryClient } from "@tanstack/svelte-query";
+  import { queryKeyUser } from "../common/queries/userQuery";
 
   let form = $state<{
     values: LoginForm;
@@ -38,6 +40,8 @@
     endpoint: endpoints.auth.login,
   });
 
+  const qc = useQueryClient();
+
   const handleSubmit: EventHandler<SubmitEvent> = (e) => {
     e.preventDefault();
 
@@ -46,11 +50,11 @@
       {
         onSuccess: () => {
           toaster.showSuccess("Login successful!");
-          navigate(routePaths.home);
+          qc.invalidateQueries({ queryKey: queryKeyUser });
         },
         onError: async (error) =>
           toaster.showError(await error.response.json()),
-      }
+      },
     );
   };
 </script>
@@ -73,7 +77,7 @@
           onblur={() => {
             form.touchedFields.email = true;
             form.errors.email = loginFormValidator.validateEmail(
-              form.values.email
+              form.values.email,
             );
           }}
         />
@@ -96,7 +100,7 @@
             onblur={() => {
               form.touchedFields.password = true;
               form.errors.password = loginFormValidator.validatePassword(
-                form.values.password
+                form.values.password,
               );
             }}
           />
