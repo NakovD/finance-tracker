@@ -9,6 +9,8 @@
   import CrsrTokenLoader from "./features/auth/CsrfTokenLoader.svelte";
   import Register from "./features/auth/register/Register.svelte";
   import { routePaths } from "./infrastructure/routing/routePaths";
+  import { userQuery } from "./features/auth/common/queries/userQuery";
+  import AuthGuard from "./features/auth/AuthGuard.svelte";
 
   const queryClient = new QueryClient({
     defaultOptions: {
@@ -22,18 +24,20 @@
 
 <QueryClientProvider client={queryClient}>
   <Toaster richColors={true} theme="dark" position="top-left" />
-  <main>
+  <main class="h-full">
     <CrsrTokenLoader />
     <Router>
-      <Route path="/monthly-finance/:id" let:params>
-        <MonthlyFinance id={params.id} />
-      </Route>
-      <Route path="/yearly-finance/:id" let:params>
-        <YearlyFinance id={params.id} /></Route
-      >
-      <Route path={routePaths.home}><AllYears /></Route>
-      <Route path="/login"><Login /></Route>
-      <Route path="/register"><Register /></Route>
+      <AuthGuard>
+        <Route path="/monthly-finance/:id" let:params>
+          <MonthlyFinance id={params.id} />
+        </Route>
+        <Route path="/yearly-finance/:id" let:params>
+          <YearlyFinance id={params.id} /></Route
+        >
+        <Route path={routePaths.home}><AllYears /></Route>
+        <Route path="/login"><Login /></Route>
+        <Route path="/register"><Register /></Route>
+      </AuthGuard>
     </Router>
   </main>
 </QueryClientProvider>
