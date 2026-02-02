@@ -28,15 +28,15 @@
     <CrsrTokenLoader />
     <Router>
       <AuthGuard>
-        <Route path="/monthly-finance/:id" let:params>
+        <Route path={routePaths.monthlyFinance} let:params>
           <MonthlyFinance id={params.id} />
         </Route>
-        <Route path="/yearly-finance/:id" let:params>
+        <Route path={routePaths.yearlyFinance} let:params>
           <YearlyFinance id={params.id} /></Route
         >
         <Route path={routePaths.home}><AllYears /></Route>
-        <Route path="/login"><Login /></Route>
-        <Route path="/register"><Register /></Route>
+        <Route path={routePaths.auth.login}><Login /></Route>
+        <Route path={routePaths.auth.register}><Register /></Route>
       </AuthGuard>
     </Router>
   </main>
