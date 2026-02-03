@@ -16,6 +16,8 @@
   import { Eye, EyeClosed } from "@lucide/svelte";
   import { navigate } from "svelte-routing";
   import { routePaths } from "../../../infrastructure/routing/routePaths";
+  import { queryKeyUser } from "../common/queries/userQuery";
+  import { useQueryClient } from "@tanstack/svelte-query";
 
   let form = $state<{
     values: RegisterForm;
@@ -55,6 +57,8 @@
     endpoint: endpoints.auth.register,
   });
 
+  const qc = useQueryClient();
+
   const handleSubmit: EventHandler<SubmitEvent> = (e) => {
     e.preventDefault();
 
@@ -68,7 +72,7 @@
       {
         onSuccess: () => {
           toaster.showSuccess("Login successful!");
-          navigate(routePaths.home);
+          qc.invalidateQueries({ queryKey: queryKeyUser });
         },
         onError: async (error) =>
           toaster.showError(await error.response.json()),
