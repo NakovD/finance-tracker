@@ -13,6 +13,7 @@
   import { monthlyFinanceFormValidator } from "../utilities/monthlyFinanceFormValidator";
   import { endpoints } from "../../../../infrastructure/api/endpoints/endpoints";
   import { createMutationFacade } from "../../../../infrastructure/api/createMutation";
+  import { authStore } from "../../../auth/stores/AuthStore.svelte";
 
   let { year, onSuccess }: { year: number; onSuccess?: VoidFunction } =
     $props();
@@ -35,7 +36,11 @@
 
   const qc = useQueryClient();
 
-  const mutation = createMutationFacade<{ month: string; income: number }>({
+  const mutation = createMutationFacade<{
+    month: string;
+    income: number;
+    userId: number;
+  }>({
     endpoint: endpoints.monthlyFinances.createMonthlyFinance,
     onSuccess: () => toaster.showSuccess("Monthly finance added successfully."),
     onError: () => toaster.showError("Failed to add monthly finance."),
@@ -47,8 +52,9 @@
       {
         month: form.values.monthName,
         income: form.values.income,
+        userId: authStore.value.isAuthenticated ? authStore.value.userId : -1,
       },
-      { onSuccess: () => onSuccess?.() }
+      { onSuccess: () => onSuccess?.() },
     );
   };
 </script>
@@ -67,7 +73,7 @@
       onblur={() => {
         form.touchedFields.monthName = true;
         form.errors.monthName = monthlyFinanceFormValidator.validateMonthName(
-          form.values.monthName
+          form.values.monthName,
         );
       }}
     />
@@ -88,7 +94,7 @@
       onblur={() => {
         form.touchedFields.income = true;
         form.errors.income = monthlyFinanceFormValidator.validateIncome(
-          form.values.income
+          form.values.income,
         );
       }}
     />
