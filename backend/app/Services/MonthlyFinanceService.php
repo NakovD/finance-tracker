@@ -50,5 +50,15 @@ class MonthlyFinanceService
         return new MessageResult("Finance deleted", true, 204);
 
     }
+
+    public function GetAvailableYears(): DataResult
+    {
+        $years = MonthlyFinance::where('user_id', auth()->id())
+                    ->distinct()
+                    ->orderBy('year', 'desc')
+                    ->pluck('year');
+
+        return new DataResult($years, "Available years retrieved", true, 200);
+    }
    
 }
