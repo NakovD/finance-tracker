@@ -8,9 +8,9 @@ use App\Results\MessageResult;
 
 class MonthlyFinanceService
 {
-    public function GetAllByUserId(string $userId): DataResult
+    public function GetAllByUserId(): DataResult
     {
-        $finances = MonthlyFinance::where('user_id', $userId)->get();
+        $finances = MonthlyFinance::where('user_id', auth()->id())->get();
 
         return new DataResult($finances, "Finances retrieved", true, 200);
     }
