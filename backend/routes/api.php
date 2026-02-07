@@ -14,6 +14,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('expenses', ExpenseController::class);
 });
 
+Route::get(
+    'monthlyFinances/meta/available-years',
+    [MonthlyFinanceController::class, 'getAvailableYears']
+);
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('monthlyFinances', MonthlyFinanceController::class);
 });

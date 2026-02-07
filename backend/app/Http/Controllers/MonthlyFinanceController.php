@@ -41,6 +41,13 @@ class MonthlyFinanceController extends Controller
         return response($result->data, $result->status_code);
     }
 
+    public function getAvailableYears()
+    {
+        $result = $this->monthlyFinanceService->GetAvailableYears();
+
+        return response($result->data, $result->status_code);
+    }
+
     /**
      * Update the specified resource in storage.
      */
