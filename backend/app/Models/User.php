@@ -49,7 +49,7 @@ class User extends Authenticatable
         ];
     }
 
-    public function expenses(): HasMany
+    public function monthlyFinances(): HasMany
     {
         return $this->hasMany(MonthlyFinance::class);
     }
