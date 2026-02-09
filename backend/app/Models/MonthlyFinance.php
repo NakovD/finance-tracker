@@ -12,6 +12,12 @@ class MonthlyFinance extends Model
     use SoftDeletes;
     //
 
+    protected $fillable = [
+        'year',
+        'name',
+        'income',
+    ];
+
     public function expenses(): HasMany
     {
         return $this->hasMany(Expense::class);
