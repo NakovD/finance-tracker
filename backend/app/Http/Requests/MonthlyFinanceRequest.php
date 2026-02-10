@@ -40,8 +40,7 @@ class MonthlyFinanceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "user_id" => "required|exists:users,id",
-            'month' => [
+            'name' => [
                 'required',
                 'string',
                 Rule::in([
@@ -50,6 +49,7 @@ class MonthlyFinanceRequest extends FormRequest
                 ]),
             ],
             "income" => "required|numeric|min:1|max:25000",
+            "year" => "required|integer|min:2000|max:2100",
         ];
     }
 }
