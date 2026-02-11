@@ -16,7 +16,7 @@ class MonthlyFinanceService
     }
     public function Create(array $data): DataResult
     {
-        $created = MonthlyFinance::create($data);
+        $created = auth()->user()->monthlyFinances()->create($data);
 
         return new DataResult($created, "Finance created", true, 201);
     }
