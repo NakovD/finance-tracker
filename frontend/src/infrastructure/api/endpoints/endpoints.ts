@@ -5,6 +5,7 @@ export const endpoints = {
     user: "user",
   },
   monthlyFinances: {
+    getAvailableYears: "monthlyFinances/meta/available-years",
     getMonthlyFinances: "monthlyFinances",
     createMonthlyFinance: "monthlyFinances",
     getMonthlyFinance: (id: string) => `monthlyFinances/${id}`,
