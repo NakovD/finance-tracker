@@ -26,20 +26,22 @@
     values: {
       monthName: "",
       income: 0,
+      year: new Date().getFullYear(),
     },
     errors: {},
     touchedFields: {
       income: false,
       monthName: false,
+      year: false,
     },
   });
 
   const qc = useQueryClient();
 
   const mutation = createMutationFacade<{
-    month: string;
+    name: string;
     income: number;
-    userId: number;
+    year: number;
   }>({
     endpoint: endpoints.monthlyFinances.createMonthlyFinance,
     onSuccess: () => toaster.showSuccess("Monthly finance added successfully."),
@@ -50,9 +52,9 @@
     e.preventDefault();
     $mutation.mutate(
       {
-        month: form.values.monthName,
+        name: form.values.monthName,
         income: form.values.income,
-        userId: authStore.value.isAuthenticated ? authStore.value.userId : -1,
+        year: form.values.year,
       },
       { onSuccess: () => onSuccess?.() },
     );
@@ -101,6 +103,27 @@
     {#if form.errors.income}
       <div class="mb-1"></div>
       <p class="text-red-500 text-sm">{form.errors.income}</p>
+    {/if}
+  </Label>
+  <div class="mb-4"></div>
+  <Label id="year" label="Year">
+    <Inputfield
+      id="year"
+      type="number"
+      value={form.values.year}
+      placeholder="Year"
+      error={form.errors.year}
+      oninput={(e) => (form.values.year = e.currentTarget.valueAsNumber)}
+      onblur={() => {
+        form.touchedFields.year = true;
+        form.errors.year = monthlyFinanceFormValidator.validateYear(
+          form.values.year,
+        );
+      }}
+    />
+    {#if form.errors.year}
+      <div class="mb-1"></div>
+      <p class="text-red-500 text-sm">{form.errors.year}</p>
     {/if}
   </Label>
   <div class="mb-6"></div>
