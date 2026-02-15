@@ -8,6 +8,7 @@ export const endpoints = {
     getAvailableYears: "monthlyFinances/meta/available-years",
     getMonthlyFinances: "monthlyFinances",
     createMonthlyFinance: "monthlyFinances",
+    getMonthlyFinancesByYear: (year: number) => `monthlyFinances?year=${year}`,
     getMonthlyFinance: (id: string) => `monthlyFinances/${id}`,
     updateMonthlyFinance: (id: string) => `monthlyFinances/${id}`,
     deleteMonthlyFinance: (id: string) => `monthlyFinances/${id}`,
