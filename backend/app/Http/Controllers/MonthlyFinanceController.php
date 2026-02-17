@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\MonthlyFinanceRequest;
 use App\Services\MonthlyFinanceService;
+use Illuminate\Http\Request;
 
 class MonthlyFinanceController extends Controller
 {
@@ -14,9 +15,17 @@ class MonthlyFinanceController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $year = $request->query('year');
+
+        if ($year) {
+            $result = $this->monthlyFinanceService->GetAllByUserIdAndYear((int)$year);
+        } else {
+            $result = $this->monthlyFinanceService->GetAllByUserId();
+        }
+
+        return response($result->data, $result->status_code);
     }
 
     /**
