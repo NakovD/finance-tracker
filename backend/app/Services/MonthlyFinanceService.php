@@ -4,6 +4,7 @@ namespace App\Services;
 use App\Models\MonthlyFinance;
 use App\Results\DataResult;
 use App\Results\MessageResult;
+use App\Http\Resources\MonthlyFinanceResource;
 
 
 class MonthlyFinanceService
@@ -36,6 +37,7 @@ class MonthlyFinanceService
 
         return new DataResult($finance, "Finance updated", true, 200);
     }
+
     public function Delete(int $financeId): MessageResult
     {
         $finance = MonthlyFinance::where("id", $financeId)
@@ -59,6 +61,15 @@ class MonthlyFinanceService
                     ->pluck('year');
 
         return new DataResult($years, "Available years retrieved", true, 200);
+    }
+
+    public function GetAllByUserIdAndYear(int $year): DataResult
+    {
+        $finances = MonthlyFinance::where('user_id', auth()->id())
+                    ->where('year', $year)
+                    ->get();
+
+        return new DataResult(MonthlyFinanceResource::collection($finances), "Finances retrieved", true, 200);
     }
    
 }
