@@ -8,6 +8,9 @@
   import Modal from "../../common/modal/Modal.svelte";
   import { CirclePlus } from "@lucide/svelte";
   import Loader from "../../common/loader/Loader.svelte";
+  import { createQueryFacade } from "../../../infrastructure/api/createQueryFacade";
+  import { endpoints } from "../../../infrastructure/api/endpoints/endpoints";
+  import { array, number, object, string } from "zod";
 
   const { id }: { id: string } = $props();
 
@@ -15,12 +18,15 @@
 
   let isOpen = $state(false);
 
-  const query = createQuery<MonthlyFinance[]>({
+  const query = createQueryFacade({
     queryKey: ["all-finances", id],
-    queryFn: () =>
-      handleDbAction(() =>
-        expenseTrackerDB.getAllForYear<MonthlyFinance[]>(+id)
-      ),
+    endpoint: endpoints.monthlyFinances.getMonthlyFinancesByYear(+id),
+    validator: array(
+      object({
+        id: number(),
+        name: string(),
+      }),
+    ),
     staleTime: 1000 * 60 * 5,
     gcTime: 1000 * 60 * 10,
   });
