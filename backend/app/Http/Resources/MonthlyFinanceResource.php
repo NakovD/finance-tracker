@@ -17,7 +17,6 @@ class MonthlyFinanceResource extends JsonResource
         return [
             'id'        => $this->id,
             'name'     => $this->name,
-            'income'    => $this->income,
         ];
     }
 }
