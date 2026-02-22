@@ -5,6 +5,7 @@ use App\Models\MonthlyFinance;
 use App\Results\DataResult;
 use App\Results\MessageResult;
 use App\Http\Resources\MonthlyFinanceResource;
+use App\Http\Resources\MonthlyFinanceDetailResource;
 
 
 class MonthlyFinanceService
@@ -51,6 +52,19 @@ class MonthlyFinanceService
 
         return new MessageResult("Finance deleted", true, 204);
 
+    }
+
+    public function GetById(int $financeId): DataResult
+    {
+        $finance = MonthlyFinance::where("id", $financeId)
+            ->with('expenses')
+            ->first();
+
+        if (!$finance) {
+            return new DataResult(null,"Finance not found", false, 404);
+        }
+
+        return new DataResult(new MonthlyFinanceDetailResource($finance), "Finance retrieved", true, 200);
     }
 
     public function GetAvailableYears(): DataResult
