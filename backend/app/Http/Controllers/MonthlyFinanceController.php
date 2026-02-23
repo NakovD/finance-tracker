@@ -43,9 +43,9 @@ class MonthlyFinanceController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show()
+    public function show(int $id)
     {
-        $result = $this->monthlyFinanceService->GetAllByUserId();
+        $result = $this->monthlyFinanceService->GetById($id);
 
         return response($result->data, $result->status_code);
     }
