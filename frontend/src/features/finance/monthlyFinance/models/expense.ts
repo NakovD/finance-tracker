@@ -1,10 +1,4 @@
-import type { ExpenseCategory } from "./expenseCategory";
+import type { expenseValidator } from "../validators/expenseValidator";
+import type { infer as ZodInfer } from "zod";
 
-export type Expense = {
-  id: string;
-  name: string;
-  amount: number;
-  date: string;
-  description?: string;
-  category: ExpenseCategory;
-};
+export type Expense = ZodInfer<typeof expenseValidator>;
