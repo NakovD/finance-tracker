@@ -1,5 +1,8 @@
 <?php
 
+
+namespace App\Enums;
+
 enum ExpenseCategory: string
 {
     case Groceries = 'groceries';
