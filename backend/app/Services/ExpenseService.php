@@ -8,11 +8,21 @@ use App\Results\MessageResult;
 
 class ExpenseService
 {
-    public function Create(array $data): DataResult
+    public function Create(mixed $data): DataResult
     {
-        $created = Expense::create($data);
+        $monthlyFinance = auth()->user()
+            ->monthlyFinances()
+            ->find($data['monthly_finance_id']);
 
-        return new DataResult($created, "Expense created", true, 201);
+            if (!$monthlyFinance) {
+                return new DataResult(null, "Monthly finance not found", false, 404);
+            }
+
+         $expense = $monthlyFinance
+            ->expenses()
+            ->create($data);
+
+        return new DataResult($expense, "Expense created", true, 201);
     }
 
     public function Update(array $data): DataResult
