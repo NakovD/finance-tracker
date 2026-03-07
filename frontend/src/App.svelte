@@ -9,12 +9,13 @@
   import CrsrTokenLoader from "./features/auth/CsrfTokenLoader.svelte";
   import Register from "./features/auth/register/Register.svelte";
   import { routePaths } from "./infrastructure/routing/routePaths";
-  import { userQuery } from "./features/auth/common/queries/userQuery";
   import AuthGuard from "./features/auth/AuthGuard.svelte";
 
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
+        staleTime: 1000 * 60 * 5,
+        gcTime: 1000 * 60 * 10,
         refetchOnWindowFocus: false,
         retry: false,
       },
