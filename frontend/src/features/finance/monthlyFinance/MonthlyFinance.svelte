@@ -3,20 +3,14 @@
   import { sum } from "../../../infrastructure/utilities/reduceUtility";
   import MonthlyExpenses from "./components/MonthlyExpenses.svelte";
   import Loader from "../../common/loader/Loader.svelte";
-  import { createQueryFacade } from "../../../infrastructure/api/createQueryFacade";
-  import { endpoints } from "../../../infrastructure/api/endpoints/endpoints";
-  import { monthlyFinanceQueryValidator } from "./validators/monthlyFinanceValidator";
+  import { monthlyFinanceQuery } from "./queries/monthlyFinanceQuery";
 
   let { id }: { id: string } = $props();
 
-  const query = createQueryFacade({
-    queryKey: ["monthly-finance", id],
-    endpoint: endpoints.monthlyFinances.getMonthlyFinance(id),
-    validator: monthlyFinanceQueryValidator,
-  });
+  const query = monthlyFinanceQuery(id);
 </script>
 
-{#if $query.isLoading}
+{#if $query.isFetching}
   <Loader />
 {:else if $query.isError}
   <p>Error: {$query.error.error}</p>
