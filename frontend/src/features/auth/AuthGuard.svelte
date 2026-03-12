@@ -27,8 +27,6 @@
 
     if (!$query.isSuccess) return;
 
-    console.log($query.data);
-
     authStore.value = {
       isAuthenticated: true,
       userEmail: $query.data.email,

@@ -14,8 +14,6 @@
   } from "./models/registerForm";
   import { registerFormValidator } from "./utilities/registerFormValidator";
   import { Eye, EyeClosed } from "@lucide/svelte";
-  import { navigate } from "svelte-routing";
-  import { routePaths } from "../../../infrastructure/routing/routePaths";
   import { queryKeyUser } from "../common/queries/userQuery";
   import { useQueryClient } from "@tanstack/svelte-query";
 
