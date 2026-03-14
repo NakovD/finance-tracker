@@ -3,11 +3,12 @@ import { httpInstance } from "./httpInstance";
 import type { AppError } from "./models/AppError";
 import type { ZodType } from "zod";
 import { getCsrfToken } from "./utilities/csrfTokenUtility";
+import { parseResponse } from "./utilities/responseUtility";
 
 export const METHODS = {
   GET: async <T extends Record<string, any>>(
     endpoint: string,
-    validator: ZodType<T>
+    validator: ZodType<T>,
   ) => {
     try {
       const result = await httpInstance.get(endpoint).json<T>();
@@ -41,15 +42,13 @@ export const METHODS = {
     }
   },
   POST: async <TRequest, TResponse>(endpoint: string, body: TRequest) => {
-    const response = httpInstance
-      .post<TResponse>(endpoint, {
-        headers: new Headers({
-          "X-XSRF-TOKEN": getCsrfToken() ?? "",
-        }),
-        json: body,
-      })
-      .json();
+    const response = await httpInstance.post<TResponse>(endpoint, {
+      headers: new Headers({
+        "X-XSRF-TOKEN": getCsrfToken() ?? "",
+      }),
+      json: body,
+    });
 
-    return response;
+    return parseResponse(response);
   },
 } as const;
