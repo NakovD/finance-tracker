@@ -6,7 +6,7 @@ import { getCsrfToken } from "./utilities/csrfTokenUtility";
 import { parseResponse } from "./utilities/responseUtility";
 
 export const METHODS = {
-  GET: async <T extends Record<string, any>>(
+  GET: async <T extends Record<string, unknown>>(
     endpoint: string,
     validator: ZodType<T>,
   ) => {
@@ -51,4 +51,15 @@ export const METHODS = {
 
     return parseResponse(response);
   },
+  DELETE: async <TResponse>(endpoint: string) => {
+    const response = await httpInstance.delete<TResponse>(endpoint, {
+      headers: new Headers({
+        "X-XSRF-TOKEN": getCsrfToken() ?? "",
+      }),
+    });
+
+    return parseResponse(response);
+  }
 } as const;
+
+
