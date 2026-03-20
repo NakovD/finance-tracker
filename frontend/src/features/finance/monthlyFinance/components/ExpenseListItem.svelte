@@ -6,8 +6,11 @@
   import Button from "../../../common/button/Button.svelte";
   import Modal from "../../../common/modal/Modal.svelte";
   import Tooltip from "../../../common/tooltip/Tooltip.svelte";
-  import { expenseTrackerDB } from "../../../../infrastructure/db";
-  import { handleDbAction } from "../../../../infrastructure/db/utilities/handleDbAction";
+  import { createMutationFacade } from "../../../../infrastructure/api/createMutation";
+  import { endpoints } from "../../../../infrastructure/api/endpoints/endpoints";
+  import { toaster } from "../../../common/toaster/toaster";
+  import { createDeleteMutationFacade } from "../../../../infrastructure/api/deleteMutation";
+  import { monthlyFinanceQueryKey } from "../queries/monthlyFinanceQuery";
 
   const { expense, month }: { expense: Expense; month: MonthlyFinance } =
     $props();
@@ -33,22 +36,17 @@
     deleteDialog.close();
   };
 
-  let mutation = createMutation<MonthlyFinance, Error, void>({
-    mutationFn: () =>
-      handleDbAction(() =>
-        expenseTrackerDB.editSingle({
-          ...month,
-          expenses: month.expenses.filter((e) => e.id !== expense.id),
-        })
-      ),
+  let mutation = createDeleteMutationFacade<MonthlyFinance>({
+    endpoint: endpoints.expenses.deleteExpense(expense.id.toString()),
   });
 
   const handleDeleteExpense = () => {
     $mutation.mutate(undefined, {
       onSuccess: () => {
         qc.invalidateQueries({
-          queryKey: ["monthly-finance", month.id],
+          queryKey: monthlyFinanceQueryKey(month.id),
         });
+        toaster.showSuccess("Expense deleted successfully!");
       },
       onSettled: () => handleCloseDeleteDialog(),
     });
