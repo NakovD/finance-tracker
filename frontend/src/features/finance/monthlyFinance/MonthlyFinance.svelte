@@ -10,7 +10,7 @@
   const query = monthlyFinanceQuery(id);
 </script>
 
-{#if $query.isFetching}
+{#if $query.isLoading}
   <Loader />
 {:else if $query.isError}
   <p>Error: {$query.error.error}</p>
