@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Expense;
 use App\Services\ExpenseService;
 use App\Http\Requests\ExpenseRequest;
+use App\Http\Resources\ExpenseResource;
 
 
 class ExpenseController extends Controller
@@ -29,7 +30,9 @@ class ExpenseController extends Controller
 
         $result = $this->expenseService->Create($validated);
 
-        return response($result->message, $result->status_code);  
+        return (new ExpenseResource($result->data))
+        ->response()
+        ->setStatusCode($result->status_code);
     }
 
     /**
@@ -43,13 +46,15 @@ class ExpenseController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(ExpenseRequest $request)
+    public function update(ExpenseRequest $request, Expense $expense)
     {
         $validated = $request->validated();
 
-        $result = $this->expenseService->update($validated);
+        $result = $this->expenseService->update($expense, $validated);
 
-        return response($result->message, $result->status_code);  
+        return (new ExpenseResource($result->data))
+        ->response()
+        ->setStatusCode($result->status_code);
     }
 
     /**
