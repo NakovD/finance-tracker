@@ -6,7 +6,7 @@ use App\Models\Expense;
 use App\Models\MonthlyFinance;
 use App\Enums\ExpenseCategory;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Date;
 use Illuminate\Validation\Rules\Enum;
 
 class ExpenseRequest extends FormRequest
@@ -44,7 +44,7 @@ class ExpenseRequest extends FormRequest
             "monthly_finance_id" => "required|exists:monthly_finances,id",
             "name" => "required|string|min:4|max:255",
             "amount" => "required|numeric|min:1",
-            "date" => ["required", Rule::date()->afterOrEqual(today())],
+            "date" => ["required", (new Date)->after('2000-01-01')],
             "description" => "nullable|string|min:10|max:1000",
             "category" => ["required", new Enum(ExpenseCategory::class)],
         ];
