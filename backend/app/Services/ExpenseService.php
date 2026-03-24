@@ -25,15 +25,8 @@ class ExpenseService
         return new DataResult($expense, "Expense created", true, 201);
     }
 
-    public function Update(array $data): DataResult
+    public function Update(Expense $expense, array $data): DataResult
     {
-        $expense = Expense::where("id", $data["id"])
-            ->first();
-
-        if (!$expense) {
-            return new DataResult(null, "Expense not found", false, 404);
-        }
-
         $expense->update($data);
 
         $expense->refresh();
