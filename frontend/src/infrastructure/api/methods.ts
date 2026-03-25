@@ -51,6 +51,16 @@ export const METHODS = {
 
     return parseResponse(response);
   },
+  PUT: async <TRequest, TResponse>(endpoint: string, body: TRequest) => {
+    const response = await httpInstance.put<TResponse>(endpoint, {
+      headers: new Headers({
+        "X-XSRF-TOKEN": getCsrfToken() ?? "",
+      }),
+      json: body,
+    });
+
+    return parseResponse(response);
+  },
   DELETE: async <TResponse>(endpoint: string) => {
     const response = await httpInstance.delete<TResponse>(endpoint, {
       headers: new Headers({
