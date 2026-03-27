@@ -1,21 +1,18 @@
 <script lang="ts">
   import type { MonthlyFinance } from "../models/monthlyFinance";
-  import { useQueryClient, createMutation } from "@tanstack/svelte-query";
+  import { useQueryClient } from "@tanstack/svelte-query";
   import type { Expense, ExpenseRequest } from "../models/expense";
   import { formatDateForDateInput } from "../utils/formatDateForDateInput";
-  import { handleExpenseUpdateAdd } from "../utils/handleExpenseUpdateAdd";
-  import { expenseTrackerDB } from "../../../../infrastructure/db";
-  import { handleDbAction } from "../../../../infrastructure/db/utilities/handleDbAction";
   import Inputfield from "../../../common/form/Inputfield.svelte";
   import Label from "../../../common/form/Label.svelte";
   import Textarea from "../../../common/form/Textarea.svelte";
-  import type { ExpenseCategory } from "../models/expenseCategory";
   import { toaster } from "../../../common/toaster/toaster";
   import { expenseFormValidator } from "../utilities/expenseFormValidator";
   import { createMutationFacade } from "../../../../infrastructure/api/createMutation";
   import { endpoints } from "../../../../infrastructure/api/endpoints/endpoints";
   import Button from "../../../common/button/Button.svelte";
   import { monthlyFinanceQueryKey } from "../queries/monthlyFinanceQuery";
+  import { updateMutationFacade } from "../../../../infrastructure/api/updateMutation";
 
   const today = new Date();
 
@@ -66,8 +63,12 @@
     category?: string;
   }>({});
 
-  let mutation = createMutationFacade<ExpenseRequest>({
+  let createMutation = createMutationFacade<ExpenseRequest, Expense>({
     endpoint: endpoints.expenses.createExpense,
+  });
+
+  let updateMutation = updateMutationFacade<ExpenseRequest, Expense>({
+    endpoint: endpoints.expenses.updateExpense(expense?.id.toString() ?? ""),
   });
 
   const resetForm = () => {
@@ -84,7 +85,10 @@
 
   const handleSubmit = (e: SubmitEvent) => {
     e.preventDefault();
-    $mutation.mutate(
+
+    let mutationFn = expense ? $updateMutation.mutate : $createMutation.mutate;
+
+    mutationFn(
       {
         monthly_finance_id: month.id,
         amount: Number(amountField),
@@ -94,11 +98,26 @@
         category: categoryField!,
       },
       {
-        onSuccess: () => {
-          toaster.showSuccess("Expense saved successfully!");
-          qc.invalidateQueries({
-            queryKey: monthlyFinanceQueryKey(month.id),
-          });
+        onSuccess: (newExpense) => {
+          toaster.showSuccess(
+            expense
+              ? "Expense updated successfully!"
+              : "Expense created successfully!",
+          );
+
+          const queryData = qc.getQueryData<MonthlyFinance>(
+            monthlyFinanceQueryKey(month.id),
+          );
+          if (queryData && typeof newExpense !== "string") {
+            qc.setQueryData(monthlyFinanceQueryKey(month.id), {
+              ...queryData,
+              expenses: expense
+                ? queryData.expenses.map((e) =>
+                    e.id === expense.id ? newExpense : e,
+                  )
+                : [...queryData.expenses, newExpense],
+            });
+          }
           resetForm();
           onSuccess?.();
         },
