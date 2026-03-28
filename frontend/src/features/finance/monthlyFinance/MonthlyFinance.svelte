@@ -8,6 +8,7 @@
   let { id }: { id: string } = $props();
 
   const query = monthlyFinanceQuery(id);
+
 </script>
 
 {#if $query.isLoading}
@@ -24,10 +25,13 @@
     <p>Expenses grouped by category</p>
     <div class="mb-4"></div>
     {#if $query.data.expenses.length > 0}
-      <MonthlyExpenses
+    {#key $query.data.expenses}
+      
+    <MonthlyExpenses
         expenses={$query.data.expenses}
         monthFinance={$query.data}
       />
+    {/key}
     {/if}
     <div class="mb-4"></div>
     <div>
