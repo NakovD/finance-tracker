@@ -2,8 +2,8 @@ import {
   createMutation,
   type CreateMutationOptions,
 } from "@tanstack/svelte-query";
-import { httpInstance } from "./httpInstance";
 import type { HTTPError } from "ky";
+import { METHODS } from "./methods";
 
 type CreateMutationFacadeOptions<TRequest, TResponse> = Omit<
   CreateMutationOptions<TResponse, HTTPError, TRequest>,
@@ -13,9 +13,9 @@ type CreateMutationFacadeOptions<TRequest, TResponse> = Omit<
 export const createMutationFacade = <TRequest, TResponse = void>({
   endpoint,
   ...rest
-}: CreateMutationFacadeOptions<TRequest, TResponse>) =>
+}: CreateMutationFacadeOptions<TRequest, string | TResponse>) =>
   createMutation({
     mutationFn: (body) =>
-      httpInstance.post<TResponse>(endpoint, { json: body }).json(),
+      METHODS.POST<TRequest, TResponse>(endpoint, body),
     ...rest,
   });

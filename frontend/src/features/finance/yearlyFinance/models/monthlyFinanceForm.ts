@@ -3,6 +3,7 @@ import type { MonthlyFinanceMonth } from "./monthlyFinanceMonth";
 export type MonthlyFinanceForm = {
   monthName: MonthlyFinanceMonth | string;
   income: number;
+  year: number;
 };
 
 export type MonthlyFinanceFormErrors = {

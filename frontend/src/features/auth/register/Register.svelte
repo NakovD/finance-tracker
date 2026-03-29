@@ -14,6 +14,8 @@
   } from "./models/registerForm";
   import { registerFormValidator } from "./utilities/registerFormValidator";
   import { Eye, EyeClosed } from "@lucide/svelte";
+  import { queryKeyUser } from "../common/queries/userQuery";
+  import { useQueryClient } from "@tanstack/svelte-query";
 
   let form = $state<{
     values: RegisterForm;
@@ -44,17 +46,32 @@
     repeatPassword: false,
   });
 
-  const mutation = createMutationFacade<{ email: string; password: string }>({
+  const mutation = createMutationFacade<{
+    name: string;
+    email: string;
+    password: string;
+    password_confirmation: string;
+  }>({
     endpoint: endpoints.auth.register,
   });
+
+  const qc = useQueryClient();
 
   const handleSubmit: EventHandler<SubmitEvent> = (e) => {
     e.preventDefault();
 
     $mutation.mutate(
-      { email: form.values.email, password: form.values.password },
       {
-        onSuccess: () => toaster.showSuccess("Login successful!"),
+        email: form.values.email,
+        name: `${form.values.firstName} ${form.values.lastName}`,
+        password: form.values.password,
+        password_confirmation: form.values.password,
+      },
+      {
+        onSuccess: () => {
+          toaster.showSuccess("Login successful!");
+          qc.invalidateQueries({ queryKey: queryKeyUser });
+        },
         onError: async (error) =>
           toaster.showError(await error.response.json()),
       }
@@ -69,7 +86,7 @@
   >
     <h2 class="text-2xl font-bold text-center text-gray-300">Login</h2>
 
-    <Label id="first-name" class="relative" label="First Name">
+    <Label id="first-name" label="First Name">
       <Inputfield
         type="text"
         id="first-name"
@@ -85,13 +102,13 @@
       />
       {#if form.errors.firstName}
         <div class="mb-1"></div>
-        <p class="text-red-500 text-sm absolute left-0 -bottom-5">
+        <p class="text-red-500 text-sm">
           {form.errors.firstName}
         </p>
       {/if}
     </Label>
     <div class="mb-6"></div>
-    <Label id="last-name" class="relative" label="Last Name">
+    <Label id="last-name" label="Last Name">
       <Inputfield
         type="text"
         id="last-name"
@@ -107,13 +124,13 @@
       />
       {#if form.errors.lastName}
         <div class="mb-1"></div>
-        <p class="text-red-500 text-sm absolute left-0 -bottom-5">
+        <p class="text-red-500 text-sm">
           {form.errors.lastName}
         </p>
       {/if}
     </Label>
     <div class="mb-6"></div>
-    <Label id="email" class="relative" label="Email">
+    <Label id="email" label="Email">
       <Inputfield
         type="text"
         id="email"
@@ -129,14 +146,14 @@
       />
       {#if form.errors.email}
         <div class="mb-1"></div>
-        <p class="text-red-500 text-sm absolute left-0 -bottom-5">
+        <p class="text-red-500 text-sm">
           {form.errors.email}
         </p>
       {/if}
     </Label>
     <div class="mb-6"></div>
 
-    <Label id="password" class="relative" label="Password">
+    <Label id="password" label="Password">
       <div class="relative">
         <Inputfield
           type={visibility.password ? "text" : "password"}
@@ -164,13 +181,13 @@
       </div>
       {#if form.errors.password}
         <div class="mb-1"></div>
-        <p class="text-red-500 text-sm absolute left-0 -bottom-5">
+        <p class="text-red-500 text-sm">
           {form.errors.password}
         </p>
       {/if}
     </Label>
     <div class="mb-6"></div>
-    <Label id="repeat-password" class="relative" label="Repeat Password">
+    <Label id="repeat-password" label="Repeat Password">
       <div class="relative">
         <Inputfield
           type={visibility.repeatPassword ? "text" : "password"}
@@ -190,8 +207,9 @@
         <button
           type="button"
           class="cursor-pointer absolute right-3 top-3 text-gray-400"
-          onclick={() => (visibility.password = !visibility.password)}
-          >{#if visibility.password}
+          onclick={() =>
+            (visibility.repeatPassword = !visibility.repeatPassword)}
+          >{#if visibility.repeatPassword}
             <EyeClosed />
           {:else}
             <Eye />
@@ -200,7 +218,7 @@
       </div>
       {#if form.errors.repeatPassword}
         <div class="mb-1"></div>
-        <p class="text-red-500 text-sm absolute left-0 -bottom-5">
+        <p class="text-red-500 text-sm">
           {form.errors.repeatPassword}
         </p>
       {/if}

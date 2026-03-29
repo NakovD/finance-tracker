@@ -1,5 +1,5 @@
 export const dbConstants = {
   dbName: "finance-tracker-db",
   dbVersion: 1,
-  objectStoreName: "montly-expenses",
+  objectStoreName: "monthly-expenses",
 } as const;

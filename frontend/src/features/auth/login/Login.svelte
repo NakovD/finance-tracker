@@ -13,6 +13,10 @@
   import { loginFormValidator } from "./utilities/loginFormValidator";
   import { toaster } from "../../common/toaster/toaster";
   import { Eye, EyeClosed } from "@lucide/svelte";
+  import { routePaths } from "../../../infrastructure/routing/routePaths";
+  import { navigate } from "svelte-routing";
+  import { useQueryClient } from "@tanstack/svelte-query";
+  import { queryKeyUser } from "../common/queries/userQuery";
 
   let form = $state<{
     values: LoginForm;
@@ -36,16 +40,21 @@
     endpoint: endpoints.auth.login,
   });
 
+  const qc = useQueryClient();
+
   const handleSubmit: EventHandler<SubmitEvent> = (e) => {
     e.preventDefault();
 
     $mutation.mutate(
       { email: form.values.email, password: form.values.password },
       {
-        onSuccess: () => toaster.showSuccess("Login successful!"),
+        onSuccess: () => {
+          toaster.showSuccess("Login successful!");
+          qc.invalidateQueries({ queryKey: queryKeyUser });
+        },
         onError: async (error) =>
           toaster.showError(await error.response.json()),
-      }
+      },
     );
   };
 </script>
@@ -68,7 +77,7 @@
           onblur={() => {
             form.touchedFields.email = true;
             form.errors.email = loginFormValidator.validateEmail(
-              form.values.email
+              form.values.email,
             );
           }}
         />
@@ -83,7 +92,7 @@
       <Label id="password" label="Password">
         <div class="relative">
           <Inputfield
-            type="password"
+            type={isPasswordVisible ? "text" : "password"}
             id="password"
             name="password"
             error={form.errors.password}
@@ -91,7 +100,7 @@
             onblur={() => {
               form.touchedFields.password = true;
               form.errors.password = loginFormValidator.validatePassword(
-                form.values.password
+                form.values.password,
               );
             }}
           />

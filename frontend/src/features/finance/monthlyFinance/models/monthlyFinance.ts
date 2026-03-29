@@ -1,9 +1,4 @@
-import type { Expense } from "./expense";
+import type { monthlyFinanceQueryValidator } from "../validators/monthlyFinanceValidator";
+import type { infer as ZodInfer } from "zod";
 
-export type MonthlyFinance = {
-  id: string;
-  name: string;
-  year: number;
-  income: number;
-  expenses: Expense[];
-};
+export type MonthlyFinance = ZodInfer<typeof monthlyFinanceQueryValidator>;

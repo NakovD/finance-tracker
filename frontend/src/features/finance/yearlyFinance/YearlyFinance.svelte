@@ -8,6 +8,9 @@
   import Modal from "../../common/modal/Modal.svelte";
   import { CirclePlus } from "@lucide/svelte";
   import Loader from "../../common/loader/Loader.svelte";
+  import { createQueryFacade } from "../../../infrastructure/api/createQueryFacade";
+  import { endpoints } from "../../../infrastructure/api/endpoints/endpoints";
+  import { array, number, object, string } from "zod";
 
   const { id }: { id: string } = $props();
 
@@ -15,12 +18,15 @@
 
   let isOpen = $state(false);
 
-  const query = createQuery<MonthlyFinance[]>({
+  const query = createQueryFacade({
     queryKey: ["all-finances", id],
-    queryFn: () =>
-      handleDbAction(() =>
-        expenseTrackerDB.getAllForYear<MonthlyFinance[]>(+id)
-      ),
+    endpoint: endpoints.monthlyFinances.getMonthlyFinancesByYear(+id),
+    validator: array(
+      object({
+        id: number(),
+        name: string(),
+      }),
+    ),
     staleTime: 1000 * 60 * 5,
     gcTime: 1000 * 60 * 10,
   });
@@ -58,12 +64,12 @@
       <p class="text-red-500">Failed to load data.</p>
     {:else if $query.isSuccess}
       {#if $query.data.length > 0}
-        {#each $query.data as montlyExpense}
+        {#each $query.data as monthlyExpense}
           <Link
-            to={`/montly-finance/${montlyExpense.id}`}
+            to={`/monthly-finance/${monthlyExpense.id}`}
             class="shadow-md rounded-lg p-4 bg-amber-950 text-white hover:bg-amber-800 transition duration-300 ease-in-out"
           >
-            <p class="text-xl font-semibold">{montlyExpense.name}</p>
+            <p class="text-xl font-semibold">{monthlyExpense.name}</p>
           </Link>
         {/each}
       {:else}

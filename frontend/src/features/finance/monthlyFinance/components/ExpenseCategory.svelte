@@ -9,12 +9,12 @@
   let {
     categoryName,
     expenses,
-    montlyFinance,
+    monthlyFinance,
     initialSearchQuery = "",
   }: {
     categoryName: string;
     expenses: Expense[];
-    montlyFinance: MonthlyFinance;
+    monthlyFinance: MonthlyFinance;
     initialSearchQuery?: string;
   } = $props();
 
@@ -27,8 +27,8 @@
     expenses.filter(
       (expense) =>
         expense.name.toLowerCase().includes(search.toLowerCase()) ||
-        expense.description?.toLowerCase().includes(search.toLowerCase())
-    )
+        expense.description?.toLowerCase().includes(search.toLowerCase()),
+    ),
   );
 </script>
 
@@ -46,14 +46,16 @@
         placeholder="Search for an expense"
         oninput={({ currentTarget }) => (search = currentTarget.value)}
       />
-      <button onclick={() => (search = "")} class="max-w-4 cursor-pointer text-white hover:text-gray-700"
+      <button
+        onclick={() => (search = "")}
+        class="max-w-4 cursor-pointer text-white hover:text-gray-700"
         ><RotateCcw /></button
       >
     </div>
     <div class="mb-4"></div>
     <ul class="list-none grid grid-cols-2 gap-2">
       {#each filteredExpenses as expense (expense.id)}
-        <ExpenseListItem {expense} month={montlyFinance} />
+        <ExpenseListItem {expense} month={monthlyFinance} />
       {/each}
     </ul>
     <div class="mb-4"></div>

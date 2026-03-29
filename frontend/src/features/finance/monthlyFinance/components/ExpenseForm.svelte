@@ -1,17 +1,18 @@
 <script lang="ts">
   import type { MonthlyFinance } from "../models/monthlyFinance";
-  import { useQueryClient, createMutation } from "@tanstack/svelte-query";
-  import type { Expense } from "../models/expense";
+  import { useQueryClient } from "@tanstack/svelte-query";
+  import type { Expense, ExpenseRequest } from "../models/expense";
   import { formatDateForDateInput } from "../utils/formatDateForDateInput";
-  import { handleExpenseUpdateAdd } from "../utils/handleExpenseUpdateAdd";
-  import { expenseTrackerDB } from "../../../../infrastructure/db";
-  import { handleDbAction } from "../../../../infrastructure/db/utilities/handleDbAction";
   import Inputfield from "../../../common/form/Inputfield.svelte";
   import Label from "../../../common/form/Label.svelte";
   import Textarea from "../../../common/form/Textarea.svelte";
-  import type { ExpenseCategory } from "../models/expenseCategory";
   import { toaster } from "../../../common/toaster/toaster";
   import { expenseFormValidator } from "../utilities/expenseFormValidator";
+  import { createMutationFacade } from "../../../../infrastructure/api/createMutation";
+  import { endpoints } from "../../../../infrastructure/api/endpoints/endpoints";
+  import Button from "../../../common/button/Button.svelte";
+  import { monthlyFinanceQueryKey } from "../queries/monthlyFinanceQuery";
+  import { updateMutationFacade } from "../../../../infrastructure/api/updateMutation";
 
   const today = new Date();
 
@@ -32,12 +33,12 @@
   let nameField = $state(expense?.name ?? "");
   let amountField = $state(expense?.amount.toString() ?? "");
   let dateField = $state(
-    formatDateForDateInput(expense?.date ? new Date(expense.date) : today)
+    formatDateForDateInput(expense?.date ? new Date(expense.date) : today),
   );
   let descriptionField = $state(expense?.description ?? "");
 
-  let categoryField = $state<ExpenseCategory | undefined>(
-    expense?.category ?? undefined
+  let categoryField = $state<string | undefined>(
+    expense?.category ?? undefined,
   );
 
   let touchedFields = $state<{
@@ -62,18 +63,13 @@
     category?: string;
   }>({});
 
-  let mutation = createMutation<MonthlyFinance, Error, Expense>({
-    mutationFn: (expense: Expense) =>
-      handleDbAction(() =>
-        expenseTrackerDB.editSingle({
-          ...month,
-          expenses: handleExpenseUpdateAdd(expense, month.expenses),
-        })
-      ),
-      onSuccess: () => toaster.showSuccess("Expense saved successfully!"),
-      onError: () => toaster.showError("Failed to save expense"),
+  let createMutation = createMutationFacade<ExpenseRequest, Expense>({
+    endpoint: endpoints.expenses.createExpense,
   });
 
+  let updateMutation = updateMutationFacade<ExpenseRequest, Expense>({
+    endpoint: endpoints.expenses.updateExpense(expense?.id.toString() ?? ""),
+  });
 
   const resetForm = () => {
     nameField = "";
@@ -87,24 +83,49 @@
     errors.date = undefined;
   };
 
-  const handleSubmit = () => {
-    $mutation.mutate(
+  const handleSubmit = (e: SubmitEvent) => {
+    e.preventDefault();
+
+    let mutationFn = expense ? $updateMutation.mutate : $createMutation.mutate;
+
+    mutationFn(
       {
+        monthly_finance_id: month.id,
         amount: Number(amountField),
         date: dateField,
-        id: expense ? expense.id : crypto.randomUUID(),
         name: nameField,
-        description: descriptionField.length > 0 ? descriptionField : undefined,
+        description: descriptionField,
         category: categoryField!,
       },
       {
-        onSuccess: () => {
-          qc.invalidateQueries({ queryKey: ["montly-finance", month.id] });
+        onSuccess: (newExpense) => {
+          toaster.showSuccess(
+            expense
+              ? "Expense updated successfully!"
+              : "Expense created successfully!",
+          );
+
+          const queryData = qc.getQueryData<MonthlyFinance>(
+            monthlyFinanceQueryKey(month.id),
+          );
+          if (queryData && typeof newExpense !== "string") {
+            qc.setQueryData(monthlyFinanceQueryKey(month.id), {
+              ...queryData,
+              expenses: expense
+                ? queryData.expenses.map((e) =>
+                    e.id === expense.id ? newExpense : e,
+                  )
+                : [...queryData.expenses, newExpense],
+            });
+          }
           resetForm();
           onSuccess?.();
         },
-        onError: () => onError?.(),
-      }
+        onError: () => {
+          toaster.showError("Failed to save expense");
+          onError?.();
+        },
+      },
     );
   };
 
@@ -129,7 +150,7 @@
       errors.name === undefined &&
       errors.amount === undefined &&
       errors.date === undefined &&
-      errors.category === undefined
+      errors.category === undefined,
   );
 </script>
 
@@ -202,7 +223,8 @@
       oninput={(e) => (descriptionField = e.currentTarget.value)}
       onblur={() => {
         touchedFields.description = true;
-        errors.description = expenseFormValidator.validateDescription(descriptionField);
+        errors.description =
+          expenseFormValidator.validateDescription(descriptionField);
       }}
     />
     {#if errors.description}
@@ -253,10 +275,7 @@
     {/if}
   </Label>
   <div class="mb-5"></div>
-  <button
-    disabled={!canSubmit}
-    type="button"
-    class="bg-blue-500 hover:bg-blue-700 disabled:bg-blue-400 text-white font-bold py-2 px-4 rounded"
-    >{expense ? "Edit expense" : "Add new expense"}</button
+  <Button disabled={!canSubmit} type="submit"
+    >{expense ? "Edit expense" : "Add new expense"}</Button
   >
 </form>

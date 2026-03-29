@@ -8,22 +8,25 @@ use App\Results\MessageResult;
 
 class ExpenseService
 {
-    public function Create(array $data): DataResult
+    public function Create(mixed $data): DataResult
     {
-        $created = Expense::create($data);
+        $monthlyFinance = auth()->user()
+            ->monthlyFinances()
+            ->find($data['monthly_finance_id']);
 
-        return new DataResult($created, "Expense created", true, 201);
+            if (!$monthlyFinance) {
+                return new DataResult(null, "Monthly finance not found", false, 404);
+            }
+
+         $expense = $monthlyFinance
+            ->expenses()
+            ->create($data);
+
+        return new DataResult($expense, "Expense created", true, 201);
     }
 
-    public function Update(array $data): DataResult
+    public function Update(Expense $expense, array $data): DataResult
     {
-        $expense = Expense::where("id", $data["id"])
-            ->first();
-
-        if (!$expense) {
-            return new DataResult(null, "Expense not found", false, 404);
-        }
-
         $expense->update($data);
 
         $expense->refresh();

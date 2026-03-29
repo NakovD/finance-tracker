@@ -1,13 +1,14 @@
 <script lang="ts">
-  import { createQuery } from "@tanstack/svelte-query";
-  import { Link } from "svelte-routing";
-  import { expenseTrackerDB } from "../../../infrastructure/db";
-  import { handleDbAction } from "../../../infrastructure/db/utilities/handleDbAction";
   import Loader from "../../common/loader/Loader.svelte";
+  import { createQueryFacade } from "../../../infrastructure/api/createQueryFacade";
+  import { endpoints } from "../../../infrastructure/api/endpoints/endpoints";
+  import { array, number } from "zod";
+  import { Link } from "svelte-routing";
 
-  const query = createQuery<number[]>({
+  const query = createQueryFacade({
+    endpoint: endpoints.monthlyFinances.getAvailableYears,
     queryKey: ["all-finances"],
-    queryFn: () => handleDbAction(() => expenseTrackerDB.getAvailableYears()),
+    validator: array(number()),
   });
 </script>
 

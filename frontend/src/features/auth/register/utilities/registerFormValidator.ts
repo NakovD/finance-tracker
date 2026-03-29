@@ -19,7 +19,7 @@ export const registerFormValidator = {
   validateLastName: (value: string) => {
     if (!value) return "Last name is required.";
 
-    if (value.length < 7) return "Last name must be at least 2 characters.";
+    if (value.length < 2) return "Last name must be at least 2 characters.";
 
     return undefined;
   },

@@ -9,11 +9,11 @@
     MonthlyFinanceFormTouchedFields,
   } from "../models/monthlyFinanceForm";
   import Button from "../../../common/button/Button.svelte";
-  import { expenseTrackerDB } from "../../../../infrastructure/db";
-  import { handleDbAction } from "../../../../infrastructure/db/utilities/handleDbAction";
-  import type { MonthlyFinance } from "../../monthlyFinance/models/monthlyFinance";
   import { toaster } from "../../../common/toaster/toaster";
-  import { monthlyFinanceFormValidator } from "../utilities/montlyFinanceFormValidator";
+  import { monthlyFinanceFormValidator } from "../utilities/monthlyFinanceFormValidator";
+  import { endpoints } from "../../../../infrastructure/api/endpoints/endpoints";
+  import { createMutationFacade } from "../../../../infrastructure/api/createMutation";
+  import { authStore } from "../../../auth/stores/AuthStore.svelte";
 
   let { year, onSuccess }: { year: number; onSuccess?: VoidFunction } =
     $props();
@@ -26,41 +26,37 @@
     values: {
       monthName: "",
       income: 0,
+      year: new Date().getFullYear(),
     },
     errors: {},
     touchedFields: {
       income: false,
       monthName: false,
+      year: false,
     },
   });
 
   const qc = useQueryClient();
 
-  const mutation = createMutation<MonthlyFinance, Error, MonthlyFinance>({
-    mutationFn: (monthlyFinance) =>
-      handleDbAction(() => expenseTrackerDB.addSingle(monthlyFinance)),
-    onSuccess: () => {
-      toaster.showSuccess("Monthly finance added successfully.");
-      qc.invalidateQueries({
-        queryKey: ["all-finances", year],
-      });
-    },
-    onError: () => {
-      toaster.showError("Failed to add monthly finance.");
-    },
+  const mutation = createMutationFacade<{
+    name: string;
+    income: number;
+    year: number;
+  }>({
+    endpoint: endpoints.monthlyFinances.createMonthlyFinance,
+    onSuccess: () => toaster.showSuccess("Monthly finance added successfully."),
+    onError: () => toaster.showError("Failed to add monthly finance."),
   });
 
   const handleSubmit = (e: SubmitEvent) => {
     e.preventDefault();
     $mutation.mutate(
       {
-        id: crypto.randomUUID(),
         name: form.values.monthName,
         income: form.values.income,
-        expenses: [],
-        year,
+        year: form.values.year,
       },
-      { onSuccess: () => onSuccess?.() }
+      { onSuccess: () => onSuccess?.() },
     );
   };
 </script>
@@ -79,7 +75,7 @@
       onblur={() => {
         form.touchedFields.monthName = true;
         form.errors.monthName = monthlyFinanceFormValidator.validateMonthName(
-          form.values.monthName
+          form.values.monthName,
         );
       }}
     />
@@ -100,13 +96,34 @@
       onblur={() => {
         form.touchedFields.income = true;
         form.errors.income = monthlyFinanceFormValidator.validateIncome(
-          form.values.income
+          form.values.income,
         );
       }}
     />
     {#if form.errors.income}
       <div class="mb-1"></div>
       <p class="text-red-500 text-sm">{form.errors.income}</p>
+    {/if}
+  </Label>
+  <div class="mb-4"></div>
+  <Label id="year" label="Year">
+    <Inputfield
+      id="year"
+      type="number"
+      value={form.values.year}
+      placeholder="Year"
+      error={form.errors.year}
+      oninput={(e) => (form.values.year = e.currentTarget.valueAsNumber)}
+      onblur={() => {
+        form.touchedFields.year = true;
+        form.errors.year = monthlyFinanceFormValidator.validateYear(
+          form.values.year,
+        );
+      }}
+    />
+    {#if form.errors.year}
+      <div class="mb-1"></div>
+      <p class="text-red-500 text-sm">{form.errors.year}</p>
     {/if}
   </Label>
   <div class="mb-6"></div>
