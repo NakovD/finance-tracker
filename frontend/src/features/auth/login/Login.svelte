@@ -14,7 +14,7 @@
   import { toaster } from "../../common/toaster/toaster";
   import { Eye, EyeClosed } from "@lucide/svelte";
   import { routePaths } from "../../../infrastructure/routing/routePaths";
-  import { navigate } from "svelte-routing";
+  import { Link } from "svelte-routing";
   import { useQueryClient } from "@tanstack/svelte-query";
   import { queryKeyUser } from "../common/queries/userQuery";
 
@@ -124,5 +124,22 @@
     </div>
 
     <Button type="submit">Login</Button>
+    <div class="mt-3">
+      <div class="flex items-center">
+        <div class="flex-grow border-t border-gray-200"></div>
+        <span class="mx-3 text-sm text-gray-400">or</span>
+        <div class="flex-grow border-t border-gray-200"></div>
+      </div>
+
+      <p class="mt-4 text-center text-sm text-gray-800">
+        Don’t have an account?
+        <Link
+          to={routePaths.auth.register}
+          class="text-cyan-500 hover:underline"
+        >
+          Sign up
+        </Link>
+      </p>
+    </div>
   </form>
 </div>
