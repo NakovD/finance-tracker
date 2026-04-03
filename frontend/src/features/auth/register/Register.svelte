@@ -16,6 +16,8 @@
   import { Eye, EyeClosed } from "@lucide/svelte";
   import { queryKeyUser } from "../common/queries/userQuery";
   import { useQueryClient } from "@tanstack/svelte-query";
+  import { routePaths } from "../../../infrastructure/routing/routePaths";
+  import { Link } from "svelte-routing";
 
   let form = $state<{
     values: RegisterForm;
@@ -224,6 +226,23 @@
       {/if}
     </Label>
     <div class="mb-8"></div>
-    <Button type="submit">Login</Button>
+    <Button type="submit">Register</Button>
+    <div class="mt-3">
+      <div class="flex items-center">
+        <div class="flex-grow border-t border-gray-200"></div>
+        <span class="mx-3 text-sm text-gray-400">or</span>
+        <div class="flex-grow border-t border-gray-200"></div>
+      </div>
+
+      <p class="mt-4 text-center text-sm text-gray-800">
+        Already have an account?
+        <Link
+          to={routePaths.auth.register}
+          class="text-cyan-500 hover:underline"
+        >
+          Log in
+        </Link>
+      </p>
+    </div>
   </form>
 </div>
