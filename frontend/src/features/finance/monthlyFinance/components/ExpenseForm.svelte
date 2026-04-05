@@ -2,7 +2,7 @@
   import type { MonthlyFinance } from "../models/monthlyFinance";
   import { useQueryClient } from "@tanstack/svelte-query";
   import type { Expense, ExpenseRequest } from "../models/expense";
-  import { formatDateForDateInput } from "../utils/formatDateForDateInput";
+  import { formatDateForDateInput } from "../utilities/formatDateForDateInput";
   import Inputfield from "../../../common/form/Inputfield.svelte";
   import Label from "../../../common/form/Label.svelte";
   import Textarea from "../../../common/form/Textarea.svelte";
