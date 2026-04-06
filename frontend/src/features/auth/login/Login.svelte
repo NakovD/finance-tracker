@@ -17,6 +17,7 @@
   import { Link } from "svelte-routing";
   import { useQueryClient } from "@tanstack/svelte-query";
   import { queryKeyUser } from "../common/queries/userQuery";
+  import Loader from "../../common/loader/Loader.svelte";
 
   let form = $state<{
     values: LoginForm;
@@ -65,65 +66,68 @@
     onsubmit={handleSubmit}
   >
     <h2 class="text-2xl font-bold text-center text-gray-300">Login</h2>
-
-    <div>
-      <Label id="email" label="Email">
-        <Inputfield
-          type="text"
-          id="email"
-          name="email"
-          error={form.errors.email}
-          oninput={(e) => (form.values.email = e.currentTarget.value)}
-          onblur={() => {
-            form.touchedFields.email = true;
-            form.errors.email = loginFormValidator.validateEmail(
-              form.values.email,
-            );
-          }}
-        />
-        {#if form.errors.email}
-          <div class="mb-1"></div>
-          <p class="text-red-500 text-sm">{form.errors.email}</p>
-        {/if}
-      </Label>
-    </div>
-
-    <div>
-      <Label id="password" label="Password">
-        <div class="relative">
+    {#if $mutation.isPending}
+      <Loader class="w-auto min-h-52 bg-transparent" />
+    {:else}
+      <div>
+        <Label id="email" label="Email">
           <Inputfield
-            type={isPasswordVisible ? "text" : "password"}
-            id="password"
-            name="password"
-            error={form.errors.password}
-            oninput={(e) => (form.values.password = e.currentTarget.value)}
+            type="text"
+            id="email"
+            name="email"
+            error={form.errors.email}
+            oninput={(e) => (form.values.email = e.currentTarget.value)}
             onblur={() => {
-              form.touchedFields.password = true;
-              form.errors.password = loginFormValidator.validatePassword(
-                form.values.password,
+              form.touchedFields.email = true;
+              form.errors.email = loginFormValidator.validateEmail(
+                form.values.email,
               );
             }}
           />
-          <button
-            type="button"
-            class="cursor-pointer absolute right-3 top-3 text-gray-400"
-            onclick={() => (isPasswordVisible = !isPasswordVisible)}
-          >
-            {#if isPasswordVisible}
-              <EyeClosed />
-            {:else}
-              <Eye />
-            {/if}</button
-          >
-        </div>
-        {#if form.errors.password}
-          <div class="mb-1"></div>
-          <p class="text-red-500 text-sm">{form.errors.password}</p>
-        {/if}
-      </Label>
-    </div>
+          {#if form.errors.email}
+            <div class="mb-1"></div>
+            <p class="text-red-500 text-sm">{form.errors.email}</p>
+          {/if}
+        </Label>
+      </div>
 
-    <Button type="submit">Login</Button>
+      <div>
+        <Label id="password" label="Password">
+          <div class="relative">
+            <Inputfield
+              type={isPasswordVisible ? "text" : "password"}
+              id="password"
+              name="password"
+              error={form.errors.password}
+              oninput={(e) => (form.values.password = e.currentTarget.value)}
+              onblur={() => {
+                form.touchedFields.password = true;
+                form.errors.password = loginFormValidator.validatePassword(
+                  form.values.password,
+                );
+              }}
+            />
+            <button
+              type="button"
+              class="cursor-pointer absolute right-3 top-3 text-gray-400"
+              onclick={() => (isPasswordVisible = !isPasswordVisible)}
+            >
+              {#if isPasswordVisible}
+                <EyeClosed />
+              {:else}
+                <Eye />
+              {/if}</button
+            >
+          </div>
+          {#if form.errors.password}
+            <div class="mb-1"></div>
+            <p class="text-red-500 text-sm">{form.errors.password}</p>
+          {/if}
+        </Label>
+      </div>
+
+      <Button type="submit">Login</Button>
+    {/if}
     <div class="mt-3">
       <div class="flex items-center">
         <div class="flex-grow border-t border-gray-200"></div>
