@@ -1,37 +1,38 @@
+import { number, preprocess, string, transform } from "zod";
+import { handleZodValidationResult } from "../../../../infrastructure/utilities/validatorUtility";
+
 export const expenseFormValidator = {
-  validateName: (value: string) => {
-    if (value.length < 3) {
-      return "Name must be at least 3 characters long";
-    }
-    return undefined;
-  },
-
-  validateAmount: (value: string | number) => {
-    const num = typeof value === "number" ? value : Number(value);
-    if (isNaN(num) || num <= 0) {
-      return "Please enter a valid amount";
-    }
-    return undefined;
-  },
-
-  validateDate: (value: string) => {
-    if (!value) {
-      return "Please select a date";
-    }
-    return undefined;
-  },
-
-  validateDescription: (value: string) => {
-    if (value.length > 0 && value.length < 10) {
-      return "Description must be at least 10 characters long";
-    }
-    return undefined;
-  },
-
-  validateCategory: (value: string | undefined) => {
-    if (!value) {
-      return "Please select a category";
-    }
-    return undefined;
-  },
+  validateName: (value: string) =>
+    handleZodValidationResult(
+      string()
+        .nonempty("Name is required.")
+        .min(3, "Name must be at least 3 characters long")
+        .safeParse(value),
+    ),
+  validateAmount: (value: string) =>
+    handleZodValidationResult(
+      preprocess(
+        (val: string) => parseFloat(val) || 0,
+        number("Please enter a valid amount").positive(
+          "Amount must be a positive number",
+        ),
+      ).safeParse(value),
+    ),
+  validateDate: (value: string) =>
+    handleZodValidationResult(
+      string().nonempty("Date is required.").safeParse(value),
+    ),
+  validateDescription: (value: string) =>
+    handleZodValidationResult(
+      preprocess(
+        (val) => (val === "" ? undefined : val),
+        string()
+          .min(10, "Description must be at least 10 characters long")
+          .optional(),
+      ).safeParse(value),
+    ),
+  validateCategory: (value: string | undefined) =>
+    handleZodValidationResult(
+      string().nonempty("Category is required.").safeParse(value),
+    ),
 } as const;
