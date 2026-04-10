@@ -1,9 +1,5 @@
 <script lang="ts">
-  import { createQuery } from "@tanstack/svelte-query";
   import { Link } from "svelte-routing";
-  import { expenseTrackerDB } from "../../../infrastructure/db";
-  import { handleDbAction } from "../../../infrastructure/db/utilities/handleDbAction";
-  import type { MonthlyFinance } from "../monthlyFinance/models/monthlyFinance";
   import AddMonthlyFinanceForm from "./components/AddMonthlyFinanceForm.svelte";
   import Modal from "../../common/modal/Modal.svelte";
   import { CirclePlus } from "@lucide/svelte";

@@ -1,33 +1,25 @@
+import { number, string } from "zod";
+import { handleZodValidationResult } from "../../../../infrastructure/utilities/validatorUtility";
 import { months } from "../constants/months";
 
 export const monthlyFinanceFormValidator = {
-  validateMonthName: (value: string) => {
-    if (!value) {
-      return "Month name is required.";
-    } else {
-      if (months.some((m) => m === value)) return undefined;
-      else {
-        return "Invalid month name.";
-      }
-    }
-  },
-
-  validateIncome: (value: number) => {
-    if (value === undefined || value === null || isNaN(value))
-      return "Income is required.";
-    else if (typeof value !== "number" || value <= 0)
-      return "Income must be a positive number.";
-    else return undefined;
-  },
-  validateYear: (value: number) => {
-    if (value === undefined || value === null || isNaN(value))
-      return "Year is required.";
-    else if (
-      typeof value !== "number" ||
-      value < 2000 ||
-      value > 2100
-    )
-      return `Year must be between 2000 and ${new Date().getFullYear() + 1}.`;
-    else return undefined;
-  },
+  validateMonthName: (value: string) =>
+    handleZodValidationResult(
+      string()
+        .nonempty("Month name is required.")
+        .refine((val) => months.some((m) => m === val), "Invalid month name.")
+        .safeParse(value),
+    ),
+  validateIncome: (value: number) =>
+    handleZodValidationResult(
+      number("Please enter a valid income")
+        .positive("Income must be a positive number")
+        .safeParse(value),
+    ),
+  validateYear: (value: number) => handleZodValidationResult(
+    number("Please enter a valid year")
+      .min(2000, "Year must be between 2000 and 2100")
+      .max(2100, "Year must be between 2000 and 2100")
+      .safeParse(value)
+  ),
 } as const;
