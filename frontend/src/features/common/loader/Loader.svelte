@@ -6,7 +6,7 @@
 
 <div
   class={cn(
-    "flex justify-center items-center min-h-screen bg-neutral-700",
+    "flex justify-center items-center",
     _class,
   )}
 >
