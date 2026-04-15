@@ -13,6 +13,7 @@
   import Button from "../../../common/button/Button.svelte";
   import { monthlyFinanceQueryKey } from "../queries/monthlyFinanceQuery";
   import { updateMutationFacade } from "../../../../infrastructure/api/updateMutation";
+  import Loader from "../../../common/loader/Loader.svelte";
 
   const today = new Date();
 
@@ -154,128 +155,134 @@
   );
 </script>
 
-<form onsubmit={handleSubmit}>
-  <h2 class="font-bold">Add an expense</h2>
-  <div class="mb-5"></div>
-  <Label id="name" label="Name of expense">
-    <Inputfield
-      id="name"
-      type="text"
-      value={nameField}
-      placeholder="Name of expense"
-      error={errors.name}
-      oninput={(e) => (nameField = e.currentTarget.value)}
-      onblur={() => {
-        touchedFields.name = true;
-        errors.name = expenseFormValidator.validateName(nameField);
-      }}
-    />
-    {#if errors.name}
-      <div class="mb-1"></div>
-      <p class="text-red-500 text-sm">{errors.name}</p>
-    {/if}
-  </Label>
-  <div class="mb-5"></div>
-  <Label id="amount" label="Amount">
-    <Inputfield
-      id="amount"
-      type="number"
-      value={amountField}
-      placeholder="Amount"
-      error={errors.amount}
-      oninput={(e) => (amountField = e.currentTarget.value)}
-      onblur={() => {
-        touchedFields.amount = true;
-        errors.amount = expenseFormValidator.validateAmount(amountField);
-      }}
-    />
-    {#if errors.amount}
-      <div class="mb-1"></div>
-      <p class="text-red-500 text-sm">{errors.amount}</p>
-    {/if}
-  </Label>
-  <div class="mb-5"></div>
-  <Label id="calendar" label="Date">
-    <Inputfield
-      id="calendar"
-      type="date"
-      value={dateField}
-      placeholder="Date"
-      error={errors.date}
-      oninput={(e) => (dateField = e.currentTarget.value)}
-      onblur={() => {
-        touchedFields.date = true;
-        errors.date = expenseFormValidator.validateDate(dateField);
-      }}
-    />
-    {#if errors.date}
-      <div class="mb-1"></div>
-      <p class="text-red-500 text-sm">{errors.date}</p>
-    {/if}
-  </Label>
-  <div class="mb-5"></div>
-  <Label id="description" label="Description">
-    <Textarea
-      id="description"
-      value={descriptionField}
-      placeholder="Description"
-      error={errors.description}
-      oninput={(e) => (descriptionField = e.currentTarget.value)}
-      onblur={() => {
-        touchedFields.description = true;
-        errors.description =
-          expenseFormValidator.validateDescription(descriptionField);
-      }}
-    />
-    {#if errors.description}
-      <div class="mb-1"></div>
-      <p class="text-red-500 text-sm">{errors.description}</p>
-    {/if}
-  </Label>
-  <div class="mb-5"></div>
-  <Label id="category" label="Category">
-    <select
-      class="py-2.5 px-4 border-amber-200 border-1 text-neutral-400"
-      bind:value={categoryField}
-      onblur={() => {
-        touchedFields.category = true;
-        errors.category = expenseFormValidator.validateCategory(categoryField);
-      }}
-      onchange={() => {
-        touchedFields.category = true;
-        errors.category = expenseFormValidator.validateCategory(categoryField);
-      }}
+{#if $createMutation.isPending || $updateMutation.isPending}
+  <Loader class="min-h-96 mt-8" />
+{:else}
+  <form onsubmit={handleSubmit}>
+    <h2 class="font-bold">Add an expense</h2>
+    <div class="mb-5"></div>
+    <Label id="name" label="Name of expense">
+      <Inputfield
+        id="name"
+        type="text"
+        value={nameField}
+        placeholder="Name of expense"
+        error={errors.name}
+        oninput={(e) => (nameField = e.currentTarget.value)}
+        onblur={() => {
+          touchedFields.name = true;
+          errors.name = expenseFormValidator.validateName(nameField);
+        }}
+      />
+      {#if errors.name}
+        <div class="mb-1"></div>
+        <p class="text-red-500 text-sm">{errors.name}</p>
+      {/if}
+    </Label>
+    <div class="mb-5"></div>
+    <Label id="amount" label="Amount">
+      <Inputfield
+        id="amount"
+        type="number"
+        value={amountField}
+        placeholder="Amount"
+        error={errors.amount}
+        oninput={(e) => (amountField = e.currentTarget.value)}
+        onblur={() => {
+          touchedFields.amount = true;
+          errors.amount = expenseFormValidator.validateAmount(amountField);
+        }}
+      />
+      {#if errors.amount}
+        <div class="mb-1"></div>
+        <p class="text-red-500 text-sm">{errors.amount}</p>
+      {/if}
+    </Label>
+    <div class="mb-5"></div>
+    <Label id="calendar" label="Date">
+      <Inputfield
+        id="calendar"
+        type="date"
+        value={dateField}
+        placeholder="Date"
+        error={errors.date}
+        oninput={(e) => (dateField = e.currentTarget.value)}
+        onblur={() => {
+          touchedFields.date = true;
+          errors.date = expenseFormValidator.validateDate(dateField);
+        }}
+      />
+      {#if errors.date}
+        <div class="mb-1"></div>
+        <p class="text-red-500 text-sm">{errors.date}</p>
+      {/if}
+    </Label>
+    <div class="mb-5"></div>
+    <Label id="description" label="Description">
+      <Textarea
+        id="description"
+        value={descriptionField}
+        placeholder="Description"
+        error={errors.description}
+        oninput={(e) => (descriptionField = e.currentTarget.value)}
+        onblur={() => {
+          touchedFields.description = true;
+          errors.description =
+            expenseFormValidator.validateDescription(descriptionField);
+        }}
+      />
+      {#if errors.description}
+        <div class="mb-1"></div>
+        <p class="text-red-500 text-sm">{errors.description}</p>
+      {/if}
+    </Label>
+    <div class="mb-5"></div>
+    <Label id="category" label="Category">
+      <select
+        class="py-2.5 px-4 border-amber-200 border-1 text-neutral-400"
+        bind:value={categoryField}
+        onblur={() => {
+          touchedFields.category = true;
+          errors.category =
+            expenseFormValidator.validateCategory(categoryField);
+        }}
+        onchange={() => {
+          touchedFields.category = true;
+          errors.category =
+            expenseFormValidator.validateCategory(categoryField);
+        }}
+      >
+        <option class="text-neutral-400 bg-black" value="" disabled selected>
+          Select a category
+        </option>
+        <option class="text-neutral-400 bg-black" value="groceries">
+          Groceries
+        </option>
+        <option class="text-neutral-400 bg-black" value="transportation">
+          Transportation
+        </option>
+        <option class="text-neutral-400 bg-black" value="entertainment">
+          Entertainment
+        </option>
+        <option class="text-neutral-400 bg-black" value="utilities">
+          Utilities
+        </option>
+        <option class="text-neutral-400 bg-black" value="healthcare">
+          Healthcare
+        </option>
+        <option class="text-neutral-400 bg-black" value="parentcare">
+          Parentcare
+        </option>
+        <option class="text-neutral-400 bg-black" value="other">Other</option>
+      </select>
+      {#if errors.category}
+        <div class="mb-1"></div>
+        <p class="text-red-500 text-sm">{errors.category}</p>
+      {/if}
+    </Label>
+    <div class="mb-5"></div>
+    <Button disabled={!canSubmit} type="submit"
+      >{expense ? "Edit expense" : "Add new expense"}</Button
     >
-      <option class="text-neutral-400 bg-black" value="" disabled selected>
-        Select a category
-      </option>
-      <option class="text-neutral-400 bg-black" value="groceries">
-        Groceries
-      </option>
-      <option class="text-neutral-400 bg-black" value="transportation">
-        Transportation
-      </option>
-      <option class="text-neutral-400 bg-black" value="entertainment">
-        Entertainment
-      </option>
-      <option class="text-neutral-400 bg-black" value="utilities">
-        Utilities
-      </option>
-      <option class="text-neutral-400 bg-black" value="healthcare">
-        Healthcare
-      </option>
-      <option class="text-neutral-400 bg-black" value="parentcare">
-        Parentcare
-      </option>
-      <option class="text-neutral-400 bg-black" value="other">Other</option>
-    </select>
-    {#if errors.category}
-      <div class="mb-1"></div>
-      <p class="text-red-500 text-sm">{errors.category}</p>
-    {/if}
-  </Label>
-  <div class="mb-5"></div>
-  <Button disabled={!canSubmit} type="submit"
-    >{expense ? "Edit expense" : "Add new expense"}</Button
-  >
-</form>
+  </form>
+{/if}
