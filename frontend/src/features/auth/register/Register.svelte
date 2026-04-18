@@ -90,7 +90,7 @@
     <h2 class="text-2xl font-bold text-center text-gray-300">Register</h2>
 
     {#if $mutation.isPending}
-      <Loader class="w-auto min-h-96 bg-transparent" />
+      <Loader class="min-h-96" />
     {:else}
       <Label id="first-name" label="First Name">
         <Inputfield
