@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { createMutation, useQueryClient } from "@tanstack/svelte-query";
   import Inputfield from "../../../common/form/Inputfield.svelte";
   import Label from "../../../common/form/Label.svelte";
 
@@ -13,7 +12,7 @@
   import { monthlyFinanceFormValidator } from "../utilities/monthlyFinanceFormValidator";
   import { endpoints } from "../../../../infrastructure/api/endpoints/endpoints";
   import { createMutationFacade } from "../../../../infrastructure/api/createMutation";
-  import { authStore } from "../../../auth/stores/AuthStore.svelte";
+  import Loader from "../../../common/loader/Loader.svelte";
 
   let { year, onSuccess }: { year: number; onSuccess?: VoidFunction } =
     $props();
@@ -35,8 +34,6 @@
       year: false,
     },
   });
-
-  const qc = useQueryClient();
 
   const mutation = createMutationFacade<{
     name: string;
@@ -61,71 +58,75 @@
   };
 </script>
 
-<form onsubmit={handleSubmit}>
-  <h2>Add a Monthly finance</h2>
-  <div class="mb-8"></div>
-  <Label id="monthName" label="Month Name">
-    <Inputfield
-      id="monthName"
-      type="text"
-      value={form.values.monthName}
-      placeholder="Month Name"
-      error={form.errors.monthName}
-      oninput={(e) => (form.values.monthName = e.currentTarget.value)}
-      onblur={() => {
-        form.touchedFields.monthName = true;
-        form.errors.monthName = monthlyFinanceFormValidator.validateMonthName(
-          form.values.monthName,
-        );
-      }}
-    />
-    {#if form.errors.monthName}
-      <div class="mb-1"></div>
-      <p class="text-red-500 text-sm">{form.errors.monthName}</p>
-    {/if}
-  </Label>
-  <div class="mb-4"></div>
-  <Label id="income" label="Income">
-    <Inputfield
-      id="income"
-      type="number"
-      value={form.values.income}
-      placeholder="Income"
-      error={form.errors.income}
-      oninput={(e) => (form.values.income = e.currentTarget.valueAsNumber)}
-      onblur={() => {
-        form.touchedFields.income = true;
-        form.errors.income = monthlyFinanceFormValidator.validateIncome(
-          form.values.income,
-        );
-      }}
-    />
-    {#if form.errors.income}
-      <div class="mb-1"></div>
-      <p class="text-red-500 text-sm">{form.errors.income}</p>
-    {/if}
-  </Label>
-  <div class="mb-4"></div>
-  <Label id="year" label="Year">
-    <Inputfield
-      id="year"
-      type="number"
-      value={form.values.year}
-      placeholder="Year"
-      error={form.errors.year}
-      oninput={(e) => (form.values.year = e.currentTarget.valueAsNumber)}
-      onblur={() => {
-        form.touchedFields.year = true;
-        form.errors.year = monthlyFinanceFormValidator.validateYear(
-          form.values.year,
-        );
-      }}
-    />
-    {#if form.errors.year}
-      <div class="mb-1"></div>
-      <p class="text-red-500 text-sm">{form.errors.year}</p>
-    {/if}
-  </Label>
-  <div class="mb-6"></div>
-  <Button type="submit">Add Monthly Finance</Button>
-</form>
+{#if $mutation.isPending}
+  <Loader class="min-h-64" />
+{:else}
+  <form onsubmit={handleSubmit}>
+    <h2>Add a Monthly finance</h2>
+    <div class="mb-8"></div>
+    <Label id="monthName" label="Month Name">
+      <Inputfield
+        id="monthName"
+        type="text"
+        value={form.values.monthName}
+        placeholder="Month Name"
+        error={form.errors.monthName}
+        oninput={(e) => (form.values.monthName = e.currentTarget.value)}
+        onblur={() => {
+          form.touchedFields.monthName = true;
+          form.errors.monthName = monthlyFinanceFormValidator.validateMonthName(
+            form.values.monthName,
+          );
+        }}
+      />
+      {#if form.errors.monthName}
+        <div class="mb-1"></div>
+        <p class="text-red-500 text-sm">{form.errors.monthName}</p>
+      {/if}
+    </Label>
+    <div class="mb-4"></div>
+    <Label id="income" label="Income">
+      <Inputfield
+        id="income"
+        type="number"
+        value={form.values.income}
+        placeholder="Income"
+        error={form.errors.income}
+        oninput={(e) => (form.values.income = e.currentTarget.valueAsNumber)}
+        onblur={() => {
+          form.touchedFields.income = true;
+          form.errors.income = monthlyFinanceFormValidator.validateIncome(
+            form.values.income,
+          );
+        }}
+      />
+      {#if form.errors.income}
+        <div class="mb-1"></div>
+        <p class="text-red-500 text-sm">{form.errors.income}</p>
+      {/if}
+    </Label>
+    <div class="mb-4"></div>
+    <Label id="year" label="Year">
+      <Inputfield
+        id="year"
+        type="number"
+        value={form.values.year}
+        placeholder="Year"
+        error={form.errors.year}
+        oninput={(e) => (form.values.year = e.currentTarget.valueAsNumber)}
+        onblur={() => {
+          form.touchedFields.year = true;
+          form.errors.year = monthlyFinanceFormValidator.validateYear(
+            form.values.year,
+          );
+        }}
+      />
+      {#if form.errors.year}
+        <div class="mb-1"></div>
+        <p class="text-red-500 text-sm">{form.errors.year}</p>
+      {/if}
+    </Label>
+    <div class="mb-6"></div>
+    <Button type="submit">Add Monthly Finance</Button>
+  </form>
+{/if}

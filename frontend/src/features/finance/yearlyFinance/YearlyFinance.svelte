@@ -1,9 +1,5 @@
 <script lang="ts">
-  import { createQuery } from "@tanstack/svelte-query";
   import { Link } from "svelte-routing";
-  import { expenseTrackerDB } from "../../../infrastructure/db";
-  import { handleDbAction } from "../../../infrastructure/db/utilities/handleDbAction";
-  import type { MonthlyFinance } from "../monthlyFinance/models/monthlyFinance";
   import AddMonthlyFinanceForm from "./components/AddMonthlyFinanceForm.svelte";
   import Modal from "../../common/modal/Modal.svelte";
   import { CirclePlus } from "@lucide/svelte";
@@ -57,13 +53,13 @@
     </Modal>
   </div>
   <div class="mb-6"></div>
-  <div class="max-w-2xl mx-auto grid grid-cols-4 gap-4">
-    {#if $query.isLoading}
-      <Loader />
-    {:else if $query.isError}
-      <p class="text-red-500">Failed to load data.</p>
-    {:else if $query.isSuccess}
-      {#if $query.data.length > 0}
+  {#if $query.isLoading}
+    <Loader class="min-h-80" />
+  {:else if $query.isError}
+    <p class="text-red-500">Failed to load data.</p>
+  {:else if $query.isSuccess}
+    {#if $query.data.length > 0}
+      <div class="max-w-2xl mx-auto grid grid-cols-4 gap-4">
         {#each $query.data as monthlyExpense}
           <Link
             to={`/monthly-finance/${monthlyExpense.id}`}
@@ -72,9 +68,9 @@
             <p class="text-xl font-semibold">{monthlyExpense.name}</p>
           </Link>
         {/each}
-      {:else}
-        <p class="text-gray-500">No data available for this year.</p>
-      {/if}
+      </div>
+    {:else}
+      <p class="text-gray-500">No data available for this year.</p>
     {/if}
-  </div>
+  {/if}
 </div>
